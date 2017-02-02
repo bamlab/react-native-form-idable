@@ -88,7 +88,7 @@ class Form extends Component {
         {this.inputs.map((child, index) => {
           return (
             <View key={index}>
-              { child.type.name === 'Button' ? this.renderButtonClone(child) : this.renderTextInputClone(child)}
+              { index === this.inputs.length - 1 ? this.renderButtonClone(child) : this.renderTextInputClone(child)}
             </View>
           );
         })}
