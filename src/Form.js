@@ -29,6 +29,7 @@ const styles = StyleSheet.create({
 class Form extends Component {
   inputs: Array<Object>;
   state: Object;
+  submitButton: Object;
   static defaultProps = {
     submitText: 'validate',
     onSubmit: () => {},
@@ -37,10 +38,22 @@ class Form extends Component {
   constructor(props: _Props) {
     super(props);
     this.inputs = isArray(this.props.children) ? this.props.children : [this.props.children];
+    this.setSubmitButton(props);
+
     this.state = this.inputs.reduce((formState, input) => ({
       ...formState,
       [input.props.name]: input.props.defaultValue,
     }), {});
+  }
+
+  setSubmitButton(props) {
+    this.submitButton = React.cloneElement(props.children[props.children.length - 1], {
+      onPress: () => this.onSubmit(),
+    });
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setSubmitButton(nextProps);
   }
 
   onSubmit() {
@@ -77,9 +90,7 @@ class Form extends Component {
   }
 
   renderButtonClone(button: any) {
-    return React.cloneElement(button, {
-      onPress: () => this.onSubmit(),
-    });
+    return this.submitButton;
   }
 
   renderForm() {
