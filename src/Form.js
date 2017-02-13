@@ -3,6 +3,7 @@
 import React, { Component } from 'react';
 import {
   ActivityIndicator,
+  Keyboard,
   ScrollView,
   StyleSheet,
   View,
@@ -68,7 +69,10 @@ class Form extends Component {
         });
       }
     });
-    if (errorMessages.length === 0) return this.props.onSubmit(this.state);
+    if (errorMessages.length === 0) {
+      Keyboard.dismiss();
+      return this.props.onSubmit(this.state);
+    }
 
     if (this.props.showErrorsInToast) {
       Toast.showLongTop(`${errorMessages[0].inputPlaceholder}: ${errorMessages[0].message}`);
