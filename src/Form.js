@@ -2,7 +2,6 @@
 
 import React, { Component } from 'react';
 import {
-  ActivityIndicator,
   Keyboard,
   ScrollView,
   StyleSheet,
@@ -27,10 +26,13 @@ const styles = StyleSheet.create({
   },
 });
 
+const SUBMIT_TYPE = 'submit';
+
 class Form extends Component {
   inputs: Array<Object>;
   state: Object;
   submitButton: Object;
+
   static defaultProps = {
     submitText: 'validate',
     onSubmit: () => {},
@@ -38,30 +40,44 @@ class Form extends Component {
 
   constructor(props: _Props) {
     super(props);
-    this.inputs = isArray(this.props.children) ? this.props.children : [this.props.children];
-    this.setSubmitButton(props);
 
+    this.setFormInputs();
+    this.setSubmitButton(props);
+    this.setInitialState();
+  }
+
+  setFormInputs() {
+    this.inputs = isArray(this.props.children) ?
+      this.props.children.filter(child => child.props.type !== SUBMIT_TYPE) :
+      [this.props.children]
+    ;
+  }
+
+  setInitialState() {
     this.state = this.inputs.reduce((formState, input) => ({
       ...formState,
       [input.props.name]: input.props.defaultValue,
     }), {});
   }
 
-  setSubmitButton(props) {
-    this.submitButton = React.cloneElement(props.children[props.children.length - 1], {
+  setSubmitButton(props: _Props) {
+    const submitButton = props.children.find(child => child.props.type === SUBMIT_TYPE);
+    this.submitButton = React.cloneElement(submitButton, {
       onPress: () => this.onSubmit(),
     });
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps(nextProps: _Props) {
     this.setSubmitButton(nextProps);
   }
 
   onSubmit() {
     const errorMessages = [];
+
     this.inputs.forEach((child) => {
       if (!child.props.name) return;
       const inputErrorMessage = this.refs[child.props.name].getValidationError();
+
       if (inputErrorMessage) {
         errorMessages.push({
           inputPlaceholder: child.props.placeholder,
@@ -69,6 +85,7 @@ class Form extends Component {
         });
       }
     });
+
     if (errorMessages.length === 0) {
       Keyboard.dismiss();
       return this.props.onSubmit(this.state);
@@ -82,6 +99,7 @@ class Form extends Component {
   renderTextInputClone(input: any) {
     return React.cloneElement(input, {
       ref: input.props.name,
+      key: input.props.name,
       showError: !this.props.showErrorsInToast,
       fieldStyle: this.props.fieldStyle,
       onChangeValue: (value) => {
@@ -93,20 +111,11 @@ class Form extends Component {
     });
   }
 
-  renderButtonClone(button: any) {
-    return this.submitButton;
-  }
-
   renderForm() {
     return (
       <ScrollView ref="scrollView" scrollEnabled={false} keyboardShouldPersistTaps="always">
-        {this.inputs.map((child, index) => {
-          return (
-            <View key={index}>
-              { index === this.inputs.length - 1 ? this.renderButtonClone(child) : this.renderTextInputClone(child)}
-            </View>
-          );
-        })}
+        {this.inputs.map(child => this.renderTextInputClone(child))}
+        { this.submitButton }
       </ScrollView>
     );
   }
