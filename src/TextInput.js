@@ -27,7 +27,7 @@ type _Props = {
   label: string,
   disabled: boolean,
   refName: string,
-  fieldStyle: any,
+  formStyles: any,
 };
 
 type _State = {
@@ -106,23 +106,23 @@ class FormidableTextInput extends Component {
   }
 
   render() {
-    const { fieldStyle } = this.props;
+    const { formStyles } = this.props;
 
     const containerStyle = [
-      fieldStyle.fieldContainer,
-      this.state.errorMessage ? fieldStyle.errorContainer : {},
+      formStyles.fieldContainer,
+      this.state.errorMessage ? formStyles.errorContainer : {},
     ];
 
     return (
       <View>
         {!!this.props.label &&
-          <Text style={fieldStyle.inputLabel}>{ this.props.label }</Text>
+          <Text style={formStyles.inputLabel}>{ this.props.label }</Text>
         }
         <View style={containerStyle}>
           {
             // this.props.iconName ?
-            //   <Icon name={this.props.iconName} size={iconSize} style={fieldStyle.icon} />
-            //   : <View style={fieldStyle.iconPlaceholder} />
+            //   <Icon name={this.props.iconName} size={iconSize} style={formStyles.icon} />
+            //   : <View style={formStyles.iconPlaceholder} />
           }
           <TextInput
             onBlur={() => this.onBlur()}
@@ -132,14 +132,14 @@ class FormidableTextInput extends Component {
             {...this.getTypeProps()}
             {...this.props}
             onChangeText={(text) => this.onChangeText(text)}
-            style={fieldStyle.fieldText}
+            style={formStyles.fieldText}
             ref="input"
           />
         </View>
         {
           this.props.showError && (
-            <View style={fieldStyle.errorTextContainer}>
-              <Text style={fieldStyle.error}>{this.state.errorMessage}</Text>
+            <View style={formStyles.errorTextContainer}>
+              <Text style={formStyles.error}>{this.state.errorMessage}</Text>
             </View>
           )
         }

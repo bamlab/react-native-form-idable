@@ -2,23 +2,29 @@
 
 import React, { Component } from 'react';
 import {
-  ActivityIndicator,
   Keyboard,
   ScrollView,
   StyleSheet,
   View,
 } from 'react-native';
-import { isArray } from 'lodash';
-import Toast from '@remobile/react-native-toast';
+import { isArray, merge } from 'lodash';
+import Toast from 'react-native-root-toast';
+import defaultStyles from './defaultStyles';
+
+type _ValidationError = {
+  input: any,
+  message: string,
+}
 
 type _Props = {
   children: any,
   submitText: string,
   onSubmit: () => void,
   scrollable: boolean,
-  showErrorsInToast: boolean,
+  toastErrors: boolean,
   isLoading: boolean,
-  fieldStyle: any,
+  formStyles: any,
+  onValidationError: () => _ValidationError[],
 }
 
 const styles = StyleSheet.create({
@@ -27,10 +33,14 @@ const styles = StyleSheet.create({
   },
 });
 
+const SUBMIT_TYPE = 'submit';
+
 class Form extends Component {
   inputs: Array<Object>;
   state: Object;
   submitButton: Object;
+  formStyles: Object;
+
   static defaultProps = {
     submitText: 'validate',
     onSubmit: () => {},
@@ -38,52 +48,76 @@ class Form extends Component {
 
   constructor(props: _Props) {
     super(props);
-    this.inputs = isArray(this.props.children) ? this.props.children : [this.props.children];
-    this.setSubmitButton(props);
 
+    this.setFormInputs();
+    this.setSubmitButton(props);
+    this.setInitialState();
+    this.formStyles = merge({}, defaultStyles, props.formStyles);
+  }
+
+  setFormInputs() {
+    this.inputs = isArray(this.props.children) ?
+      this.props.children.filter(child => child.props.type !== SUBMIT_TYPE) :
+      [this.props.children]
+    ;
+  }
+
+  setInitialState() {
     this.state = this.inputs.reduce((formState, input) => ({
       ...formState,
       [input.props.name]: input.props.defaultValue,
     }), {});
   }
 
-  setSubmitButton(props) {
-    this.submitButton = React.cloneElement(props.children[props.children.length - 1], {
+  setSubmitButton(props: _Props) {
+    const submitButton = props.children.find(child => child.props.type === SUBMIT_TYPE);
+    this.submitButton = React.cloneElement(submitButton, {
       onPress: () => this.onSubmit(),
     });
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps(nextProps: _Props) {
     this.setSubmitButton(nextProps);
   }
 
   onSubmit() {
-    const errorMessages = [];
+    const errorMessages: _ValidationError[] = [];
+
     this.inputs.forEach((child) => {
       if (!child.props.name) return;
       const inputErrorMessage = this.refs[child.props.name].getValidationError();
+
       if (inputErrorMessage) {
         errorMessages.push({
-          inputPlaceholder: child.props.placeholder,
+          input: child,
           message: inputErrorMessage,
         });
       }
     });
+
     if (errorMessages.length === 0) {
       Keyboard.dismiss();
       return this.props.onSubmit(this.state);
     }
 
-    if (this.props.showErrorsInToast) {
-      Toast.showLongTop(`${errorMessages[0].inputPlaceholder}: ${errorMessages[0].message}`);
+    if (this.props.toastErrors) {
+      Toast.show(`${errorMessages[0].input.props.placeholder}: ${errorMessages[0].message}`, {
+        duration: Toast.durations.LONG,
+        position: Toast.positions.TOP,
+      });
+    }
+
+    if (this.props.onValidationError) {
+      this.props.onValidationError(errorMessages);
     }
   }
 
   renderTextInputClone(input: any) {
     return React.cloneElement(input, {
       ref: input.props.name,
-      showError: !this.props.showErrorsInToast,
-      fieldStyle: this.props.fieldStyle,
+      key: input.props.name,
+      showError: !this.props.toastErrors,
+      formStyles: this.formStyles,
       onChangeValue: (value) => {
         this.setState({
           ...this.state,
@@ -93,20 +127,11 @@ class Form extends Component {
     });
   }
 
-  renderButtonClone(button: any) {
-    return this.submitButton;
-  }
-
   renderForm() {
     return (
       <ScrollView ref="scrollView" scrollEnabled={false} keyboardShouldPersistTaps="always">
-        {this.inputs.map((child, index) => {
-          return (
-            <View key={index}>
-              { index === this.inputs.length - 1 ? this.renderButtonClone(child) : this.renderTextInputClone(child)}
-            </View>
-          );
-        })}
+        {this.inputs.map(child => this.renderTextInputClone(child))}
+        { this.submitButton }
       </ScrollView>
     );
   }
