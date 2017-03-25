@@ -50,6 +50,7 @@ class MyAwesomeForm extends Component {
         <Form
           formStyles={formStyles}
           onSubmit={formData => console.log(formData)}
+          onValidationError={errors => console.log(errors)}
         >
           <TextInput
             name="email"

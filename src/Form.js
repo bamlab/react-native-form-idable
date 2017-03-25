@@ -11,6 +11,11 @@ import { isArray, merge } from 'lodash';
 import Toast from 'react-native-root-toast';
 import defaultStyles from './defaultStyles';
 
+type _ValidationError = {
+  input: any,
+  message: string,
+}
+
 type _Props = {
   children: any,
   submitText: string,
@@ -19,6 +24,7 @@ type _Props = {
   toastErrors: boolean,
   isLoading: boolean,
   formStyles: any,
+  onValidationError: () => _ValidationError[],
 }
 
 const styles = StyleSheet.create({
@@ -75,7 +81,7 @@ class Form extends Component {
   }
 
   onSubmit() {
-    const errorMessages = [];
+    const errorMessages: _ValidationError[] = [];
 
     this.inputs.forEach((child) => {
       if (!child.props.name) return;
@@ -83,7 +89,7 @@ class Form extends Component {
 
       if (inputErrorMessage) {
         errorMessages.push({
-          inputPlaceholder: child.props.placeholder,
+          input: child,
           message: inputErrorMessage,
         });
       }
@@ -95,10 +101,14 @@ class Form extends Component {
     }
 
     if (this.props.toastErrors) {
-      Toast.show(`${errorMessages[0].inputPlaceholder}: ${errorMessages[0].message}`, {
+      Toast.show(`${errorMessages[0].input.props.placeholder}: ${errorMessages[0].message}`, {
         duration: Toast.durations.LONG,
         position: Toast.positions.TOP,
       });
+    }
+
+    if (this.props.onValidationError) {
+      this.props.onValidationError(errorMessages);
     }
   }
 
