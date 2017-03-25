@@ -7,8 +7,9 @@ import {
   StyleSheet,
   View,
 } from 'react-native';
-import { isArray } from 'lodash';
+import { isArray, merge } from 'lodash';
 import Toast from '@remobile/react-native-toast';
+import defaultStyles from './defaultStyles';
 
 type _Props = {
   children: any,
@@ -17,7 +18,7 @@ type _Props = {
   scrollable: boolean,
   showErrorsInToast: boolean,
   isLoading: boolean,
-  fieldStyle: any,
+  formStyles: any,
 }
 
 const styles = StyleSheet.create({
@@ -32,6 +33,7 @@ class Form extends Component {
   inputs: Array<Object>;
   state: Object;
   submitButton: Object;
+  formStyles: Object;
 
   static defaultProps = {
     submitText: 'validate',
@@ -44,6 +46,7 @@ class Form extends Component {
     this.setFormInputs();
     this.setSubmitButton(props);
     this.setInitialState();
+    this.formStyles = merge({}, defaultStyles, props.formStyles);
   }
 
   setFormInputs() {
@@ -101,7 +104,7 @@ class Form extends Component {
       ref: input.props.name,
       key: input.props.name,
       showError: !this.props.showErrorsInToast,
-      fieldStyle: this.props.fieldStyle,
+      formStyles: this.formStyles,
       onChangeValue: (value) => {
         this.setState({
           ...this.state,

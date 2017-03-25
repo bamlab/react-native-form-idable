@@ -10,45 +10,36 @@ npm install --save react-native-form-idable
 
 ```javascript
 import React, { Component } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Form, TextInput } from 'react-native-form-idable';
-import { Button } from 'homefriend/src/components';
-import appStyle from 'homefriend/src/appStyle';
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: appStyle.colors.primary,
+    backgroundColor: 'blue',
     flex: 1,
-    padding: appStyle.margins.l,
+    padding: 24,
   },
 });
 
-const fieldStyle = StyleSheet.create({
+const formStyles = {
   fieldContainer: {
-    alignSelf: 'stretch',
-    flexDirection: 'row',
-    backgroundColor: appStyle.input.backgroundColor,
-    alignItems: 'center',
-    height: appStyle.dimensions.touchableHeight,
+    backgroundColor: 'rgba(255, 255, 255, 0.21)',
   },
   fieldText: {
-    color: appStyle.colors.secondary,
-    flex: 1,
-    fontSize: appStyle.font.sizes.small,
+    color: 'white',
+    fontSize: 14,
     fontWeight: '600',
-    paddingHorizontal: appStyle.input.paddingHorizontal,
+    paddingHorizontal: 10,
   },
   errorTextContainer: {
     height: 17,
-    flex: 1,
-    alignItems: 'flex-end',
-    marginBottom: appStyle.margins.m,
+    marginBottom: 10,
   },
   error: {
-    color: appStyle.font.colors.white,
-    fontSize: appStyle.font.sizes.xxs,
+    color: 'white',
+    fontSize: 10,
   },
-});
+};
 
 class MyAwesomeForm extends Component {
   props: PropsType;
@@ -57,7 +48,7 @@ class MyAwesomeForm extends Component {
     return (
       <View style={styles.container}>
         <Form
-          fieldStyle={fieldStyle}
+          formStyles={formStyles}
           onSubmit={formData => console.log(formData)}
         >
           <TextInput
@@ -72,9 +63,9 @@ class MyAwesomeForm extends Component {
             type="password"
             required
           />
-          <Button type="submit">
-            Submit
-          </Button>
+          <TouchableOpacity type="submit">
+            <Text>Submit</Text>
+          </TouchableOpacity>
         </Form>
       </View>
     );
