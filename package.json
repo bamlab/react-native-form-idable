@@ -20,8 +20,8 @@
     "validate-commit-msg": "^2.11.2"
   },
   "dependencies": {
-    "@remobile/react-native-toast": "^1.0.5",
     "lodash": "^4.17.4",
+    "react-native-root-toast": "^1.0.3",
     "validator": "^6.2.1"
   },
   "config": {

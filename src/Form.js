@@ -8,7 +8,7 @@ import {
   View,
 } from 'react-native';
 import { isArray, merge } from 'lodash';
-import Toast from '@remobile/react-native-toast';
+import Toast from 'react-native-root-toast';
 import defaultStyles from './defaultStyles';
 
 type _Props = {
@@ -95,7 +95,10 @@ class Form extends Component {
     }
 
     if (this.props.showErrorsInToast) {
-      Toast.showLongTop(`${errorMessages[0].inputPlaceholder}: ${errorMessages[0].message}`);
+      Toast.show(`${errorMessages[0].inputPlaceholder}: ${errorMessages[0].message}`, {
+        duration: Toast.durations.LONG,
+        position: Toast.positions.TOP,
+      });
     }
   }
 
