@@ -16,7 +16,7 @@ type _Props = {
   submitText: string,
   onSubmit: () => void,
   scrollable: boolean,
-  showErrorsInToast: boolean,
+  toastErrors: boolean,
   isLoading: boolean,
   formStyles: any,
 }
@@ -94,7 +94,7 @@ class Form extends Component {
       return this.props.onSubmit(this.state);
     }
 
-    if (this.props.showErrorsInToast) {
+    if (this.props.toastErrors) {
       Toast.show(`${errorMessages[0].inputPlaceholder}: ${errorMessages[0].message}`, {
         duration: Toast.durations.LONG,
         position: Toast.positions.TOP,
@@ -106,7 +106,7 @@ class Form extends Component {
     return React.cloneElement(input, {
       ref: input.props.name,
       key: input.props.name,
-      showError: !this.props.showErrorsInToast,
+      showError: !this.props.toastErrors,
       formStyles: this.formStyles,
       onChangeValue: (value) => {
         this.setState({
