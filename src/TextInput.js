@@ -28,6 +28,7 @@ type _Props = {
   disabled: boolean,
   refName: string,
   formStyles: any,
+  placeholderTextColor: string,
 };
 
 type _State = {
@@ -41,6 +42,7 @@ class FormidableTextInput extends Component {
 
   static defaultProps = {
     showError: false,
+    placeholderTextColor: 'white',
   };
 
   constructor(props: _Props) {
@@ -106,7 +108,7 @@ class FormidableTextInput extends Component {
   }
 
   render() {
-    const { formStyles } = this.props;
+    const { formStyles, placeholderTextColor } = this.props;
 
     const containerStyle = [
       formStyles.fieldContainer,
@@ -128,7 +130,7 @@ class FormidableTextInput extends Component {
             onBlur={() => this.onBlur()}
             value={this.state.text || ''}
             underlineColorAndroid="transparent"
-            placeholderTextColor="white"
+            placeholderTextColor={placeholderTextColor}
             {...this.getTypeProps()}
             {...this.props}
             onChangeText={(text) => this.onChangeText(text)}
