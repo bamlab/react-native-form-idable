@@ -49,16 +49,16 @@ class Form extends Component {
   constructor(props: _Props) {
     super(props);
 
-    this.setFormInputs();
+    this.setFormInputs(props);
     this.setSubmitButton(props);
     this.setInitialState();
     this.formStyles = merge({}, defaultStyles, props.formStyles);
   }
 
-  setFormInputs() {
-    this.inputs = isArray(this.props.children) ?
-      this.props.children.filter(child => child.props.type !== SUBMIT_TYPE) :
-      [this.props.children]
+  setFormInputs(props: _Props) {
+    this.inputs = isArray(props.children) ?
+      props.children.filter(child => child.props.type !== SUBMIT_TYPE) :
+      [props.children]
     ;
   }
 
@@ -78,6 +78,7 @@ class Form extends Component {
 
   componentWillReceiveProps(nextProps: _Props) {
     this.setSubmitButton(nextProps);
+    this.setFormInputs(nextProps);
   }
 
   onSubmit() {
