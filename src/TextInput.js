@@ -24,6 +24,7 @@ type _Props = {
   showError: boolean,
   type: _TextInputType,
   placeholder: string,
+  placeholderColor: string,
   label: string,
   disabled: boolean,
   refName: string,
@@ -128,7 +129,7 @@ class FormidableTextInput extends Component {
             onBlur={() => this.onBlur()}
             value={this.state.text || ''}
             underlineColorAndroid="transparent"
-            placeholderTextColor="white"
+            placeholderTextColor={this.props.placeholderColor || formStyles.fieldText.color}
             {...this.getTypeProps()}
             {...this.props}
             onChangeText={(text) => this.onChangeText(text)}
