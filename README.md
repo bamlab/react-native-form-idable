@@ -75,3 +75,17 @@ class MyAwesomeForm extends Component {
 
 export default MyAwesomeForm;
 ```
+
+## CSS properties of the formStyles Object
+
+**inputLabelContainer:** style applied to the label container (View)
+
+**inputLabel:** style applied to the text label (Text)
+
+**fieldContainer:** style applied to the field container (View)
+
+**fieldText:** style applied to the input (TextInput)
+
+**errorTextContainer:** style applied to the error container (View)
+
+**error:** style applied to the error text (Text)
