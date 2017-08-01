@@ -15,21 +15,37 @@ export default class FormValidator {
     const { text, minLength, maxLength, type, required } = options;
 
     if (required && !text) {
-      return 'Ce champ est requis';
+      return {
+        type: 'required',
+        options,
+      };
     }
     if (!required && !text) {
       return null;
     }
     if ('email' === type && !validator.isEmail(text)) {
-      return 'Email invalide';
+      return {
+        type: 'invalid',
+        options,
+      };
     }
     if ('digits' === type && !validator.isNumeric(text)) {
-      return 'Ce champ ne doit comporter que des chiffres';
+      return {
+        type: 'numeric',
+        options,
+      };
     }
     if (minLength && (!text || text.length < minLength)) {
-      return minLength === maxLength ?
-        `Ce champ doit faire ${minLength} caractères`
-        : `Ce champ doit faire au moins ${minLength} caractères`;
+      return minLength === maxLength ? ({
+        type: 'length',
+        options: {
+          ...options,
+          length: maxLength,
+        },
+      }) : ({
+        type: 'minLength',
+        options,
+      });
     }
   }
 }

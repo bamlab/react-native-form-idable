@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import { isArray, merge } from 'lodash';
 import Toast from 'react-native-root-toast';
+import Polyglot from 'node-polyglot';
 import defaultStyles from './defaultStyles';
 
 type _ValidationError = {
@@ -25,6 +26,8 @@ type _Props = {
   isLoading: boolean,
   formStyles: any,
   onValidationError: () => _ValidationError[],
+  getErrorMessage: (error: _Error, input) => string,
+  errorMessages: {[errorType: _ErrorType]: string},
 }
 
 const styles = StyleSheet.create({
@@ -32,6 +35,21 @@ const styles = StyleSheet.create({
     alignSelf: 'stretch',
   },
 });
+
+type _ErrorType = 'required' | 'invalid' | 'digits' | 'length' | 'minLength';
+
+type _Error = {
+  type: _ErrorType,
+  data: Object;
+};
+
+const errorMessages = {
+  required: '%{placeholder} : Ce champ est requis',
+  invalid: '%{placeholder} : Email invalide',
+  digits: '%{placeholder} : Ce champ ne doit comporter que des chiffres',
+  minLength: '%{placeholder} : Ce champ doit faire au moins %{minLength} caractères',
+  length: '{%placeholder%} : Ce champ doit faire {% length %} caractères',
+};
 
 const SUBMIT_TYPE = 'submit';
 
@@ -42,6 +60,7 @@ class Form extends Component {
   state: Object;
   submitButton: Object;
   formStyles: Object;
+  polyglot: any;
 
   static defaultProps = {
     submitText: 'validate',
@@ -54,6 +73,15 @@ class Form extends Component {
     this.setFormInputs(props);
     this.setInitialState();
     this.formStyles = merge({}, defaultStyles, props.formStyles);
+    this.setPolyglot(props);
+  }
+
+  setPolyglot(props: _Props) {
+    this.polyglot = new Polyglot();
+    this.polyglot.extend({
+      ...errorMessages,
+      ...props.errorMessages,
+    });
   }
 
   setFormInputs(props: _Props) {
@@ -72,19 +100,28 @@ class Form extends Component {
 
   componentWillReceiveProps(nextProps: _Props) {
     this.setFormInputs(nextProps);
+    this.setPolyglot(nextProps);
   }
+
+  getErrorMessage = (error: _Error, input: any) => {
+    if (this.props.getErrorMessage) return this.props.getErrorMessage(error, input);
+
+    return this.polyglot.t(error.type, error.options);
+  };
 
   onSubmit() {
     const errorMessages: _ValidationError[] = [];
 
     this.inputs.forEach((child) => {
       if (!child.props.name) return;
-      const inputErrorMessage = this.refs[child.props.name].getValidationError();
+      const error = this.refs[child.props.name].getValidationError();
 
-      if (inputErrorMessage) {
+      if (error) {
         errorMessages.push({
-          input: child,
-          message: inputErrorMessage,
+          name: child.props.name,
+          placeholder: child.props.placeholder,
+          message: this.getErrorMessage(error, child),
+          error,
         });
       }
     });
@@ -95,7 +132,7 @@ class Form extends Component {
     }
 
     if (this.props.toastErrors) {
-      Toast.show(`${errorMessages[0].input.props.placeholder}: ${errorMessages[0].message}`, {
+      Toast.show(errorMessages[0].message, {
         duration: Toast.durations.LONG,
         position: Toast.positions.TOP,
       });
@@ -113,7 +150,7 @@ class Form extends Component {
     return React.cloneElement(input, {
       ref: input.props.name,
       key: input.props.name,
-      showError: !this.props.toastErrors,
+      getErrorMessage: this.getErrorMessage,
       formStyles: this.formStyles,
       returnKeyType: isLastInput ? 'done' : 'next',
       onSubmitEditing: () => {
