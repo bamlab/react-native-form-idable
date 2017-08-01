@@ -35,6 +35,8 @@ const styles = StyleSheet.create({
 
 const SUBMIT_TYPE = 'submit';
 
+const isInput = component => component.props.type && component.props.type !== SUBMIT_TYPE;
+
 class Form extends Component {
   inputs: Array<Object>;
   state: Object;
@@ -50,14 +52,13 @@ class Form extends Component {
     super(props);
 
     this.setFormInputs(props);
-    this.setSubmitButton(props);
     this.setInitialState();
     this.formStyles = merge({}, defaultStyles, props.formStyles);
   }
 
   setFormInputs(props: _Props) {
     this.inputs = isArray(props.children) ?
-      props.children.filter(child => child.props.type !== SUBMIT_TYPE) :
+      props.children.filter(isInput) :
       [props.children]
     ;
   }
@@ -69,15 +70,7 @@ class Form extends Component {
     }), {});
   }
 
-  setSubmitButton(props: _Props) {
-    const submitButton = props.children.find(child => child.props.type === SUBMIT_TYPE);
-    this.submitButton = React.cloneElement(submitButton, {
-      onPress: () => this.onSubmit(),
-    });
-  }
-
   componentWillReceiveProps(nextProps: _Props) {
-    this.setSubmitButton(nextProps);
     this.setFormInputs(nextProps);
   }
 
@@ -128,19 +121,25 @@ class Form extends Component {
     });
   }
 
-  renderForm() {
-    return (
-      <ScrollView ref="scrollView" scrollEnabled={false} keyboardShouldPersistTaps="always">
-        {this.inputs.map(child => this.renderTextInputClone(child))}
-        { this.submitButton }
-      </ScrollView>
-    );
+  renderChild = (child) => {
+    if (child.props.type === SUBMIT_TYPE) {
+      return React.cloneElement(child, { onPress: () => this.onSubmit(), key: 'submit' });
+    }
+    if (isInput(child)) return this.renderTextInputClone(child);
+
+    return child;
   }
 
   render() {
+    const children = isArray(this.props.children) ? this.props.children : [this.props.children];
+
     return (
       <View style={styles.scrollView}>
-        { this.renderForm() }
+        <ScrollView scrollEnabled={false} keyboardShouldPersistTaps="always">
+        {
+          children.map(this.renderChild)
+        }
+        </ScrollView>
       </View>
     );
   }
