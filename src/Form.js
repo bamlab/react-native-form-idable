@@ -107,11 +107,24 @@ class Form extends Component {
   }
 
   renderTextInputClone(input: any) {
+    const inputPosition = this.inputs.findIndex(otherInput => input.props.name === otherInput.props.name);
+    const isLastInput = inputPosition === this.inputs.length - 1;
+
     return React.cloneElement(input, {
       ref: input.props.name,
       key: input.props.name,
       showError: !this.props.toastErrors,
       formStyles: this.formStyles,
+      returnKeyType: isLastInput ? 'done' : 'next',
+      onSubmitEditing: () => {
+        if (isLastInput) {
+          this.onSubmit();
+          return;
+        }
+
+        const nextInput = this.inputs[inputPosition + 1];
+        this.refs[nextInput.props.name].focus();
+      },
       onChangeValue: (value) => {
         this.setState({
           ...this.state,
