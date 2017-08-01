@@ -18,6 +18,7 @@ type _TextInputType =
 type _Props = {
   name: string,
   onChangeValue: (value: string) => void,
+  getErrorMessage: (error: _ErrorType) => string,
   iconName: string,
   defaultValue: string,
   required: boolean,
@@ -64,14 +65,16 @@ class FormidableTextInput extends Component {
   }
 
   getValidationError() {
-    const errorMessage = FormValidator.validate({
+    const error = FormValidator.validate({
       ...this.props,
       text: this.state.text,
     });
 
-    this.setState({ errorMessage });
+    if (error) {
+      this.setState({ errorMessage: this.props.getErrorMessage(error) });
+    }
 
-    return errorMessage;
+    return error;
   }
 
   getTypeProps() {

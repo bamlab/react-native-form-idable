@@ -33,6 +33,7 @@
   },
   "dependencies": {
     "lodash": "^4.17.4",
+    "node-polyglot": "^2.2.2",
     "react-native-root-toast": "^1.0.3",
     "validator": "^6.2.1"
   },

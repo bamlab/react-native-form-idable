@@ -17,7 +17,7 @@ const setupContainerTesting = () => {
 setupContainerTesting();
 
 describe('<Form />', () => {
-  it('should do stuff', () => {
+  it('submits the form', () => {
     const onSubmit = jest.fn();
     const form = mount(
       <Form
@@ -45,5 +45,21 @@ describe('<Form />', () => {
       email: 'alexandrem@bam.tech',
       password: 'Very secure password',
     });
+  });
+
+  it('returns default error message if no message is specified', () => {
+    const onValidationError = jest.fn();
+    const form = mount(
+      <Form onValidationError={onValidationError}>
+        <TextInput
+          name="email"
+          placeholder="Email"
+          type="email"
+          defaultValue="alexandrem"
+        />
+        <TouchableOpacity type="submit" />
+      </Form>,
+    );
+    form.instance().onSubmit();
   });
 });
