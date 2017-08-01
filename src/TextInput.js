@@ -1,19 +1,10 @@
 // @flow
 
 import React, { Component } from 'react';
-import {
-  Text,
-  TextInput,
-  View,
-} from 'react-native';
+import { Text, TextInput, View } from 'react-native';
 import FormValidator from './FormValidator';
 
-type _TextInputType =
-  | 'name'
-  | 'text'
-  | 'email'
-  | 'password'
-  | 'digits';
+type _TextInputType = 'name' | 'text' | 'email' | 'password' | 'digits';
 
 type _Props = {
   name: string,
@@ -34,7 +25,7 @@ type _Props = {
 type _State = {
   text: ?string,
   errorMessage: ?string,
-}
+};
 
 class FormidableTextInput extends Component {
   props: _Props;
@@ -119,8 +110,9 @@ class FormidableTextInput extends Component {
     return (
       <View>
         {!!this.props.label &&
-          <Text style={formStyles.inputLabel}>{ this.props.label }</Text>
-        }
+          <Text style={formStyles.inputLabel}>
+            {this.props.label}
+          </Text>}
         <View style={containerStyle}>
           {
             // this.props.iconName ?
@@ -134,18 +126,17 @@ class FormidableTextInput extends Component {
             placeholderTextColor="white"
             {...this.getTypeProps()}
             {...this.props}
-            onChangeText={(text) => this.onChangeText(text)}
+            onChangeText={text => this.onChangeText(text)}
             style={formStyles.fieldText}
             ref="input"
           />
         </View>
-        {
-          this.props.showError && (
-            <View style={formStyles.errorTextContainer}>
-              <Text style={formStyles.error}>{this.state.errorMessage}</Text>
-            </View>
-          )
-        }
+        {this.props.showError &&
+          <View style={formStyles.errorTextContainer}>
+            <Text style={formStyles.error}>
+              {this.state.errorMessage}
+            </Text>
+          </View>}
       </View>
     );
   }

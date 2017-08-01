@@ -8,7 +8,7 @@ export type _FormValidationOptions = {
   maxLength?: number,
   type?: string,
   required?: boolean,
-}
+};
 
 export default class FormValidator {
   static validate(options: _FormValidationOptions) {
@@ -36,16 +36,18 @@ export default class FormValidator {
       };
     }
     if (minLength && (!text || text.length < minLength)) {
-      return minLength === maxLength ? ({
-        type: 'length',
-        options: {
-          ...options,
-          length: maxLength,
-        },
-      }) : ({
-        type: 'minLength',
-        options,
-      });
+      return minLength === maxLength
+        ? {
+            type: 'length',
+            options: {
+              ...options,
+              length: maxLength,
+            },
+          }
+        : {
+            type: 'minLength',
+            options,
+          };
     }
   }
 }

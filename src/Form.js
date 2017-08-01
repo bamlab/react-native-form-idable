@@ -1,12 +1,7 @@
 // @flow
 
 import React, { Component } from 'react';
-import {
-  Keyboard,
-  ScrollView,
-  StyleSheet,
-  View,
-} from 'react-native';
+import { Keyboard, ScrollView, StyleSheet, View } from 'react-native';
 import { isArray, merge } from 'lodash';
 import Toast from 'react-native-root-toast';
 import Polyglot from 'node-polyglot';
@@ -15,7 +10,7 @@ import defaultStyles from './defaultStyles';
 type _ValidationError = {
   input: any,
   message: string,
-}
+};
 
 type _Props = {
   children: any,
@@ -27,8 +22,8 @@ type _Props = {
   formStyles: any,
   onValidationError: () => _ValidationError[],
   getErrorMessage: (error: _Error, input) => string,
-  errorMessages: {[errorType: _ErrorType]: string},
-}
+  errorMessages: { [errorType: _ErrorType]: string },
+};
 
 const styles = StyleSheet.create({
   scrollView: {
@@ -40,7 +35,7 @@ type _ErrorType = 'required' | 'invalid' | 'digits' | 'length' | 'minLength';
 
 type _Error = {
   type: _ErrorType,
-  data: Object;
+  data: Object,
 };
 
 const errorMessages = {
@@ -85,17 +80,17 @@ class Form extends Component {
   }
 
   setFormInputs(props: _Props) {
-    this.inputs = isArray(props.children) ?
-      props.children.filter(isInput) :
-      [props.children]
-    ;
+    this.inputs = isArray(props.children) ? props.children.filter(isInput) : [props.children];
   }
 
   setInitialState() {
-    this.state = this.inputs.reduce((formState, input) => ({
-      ...formState,
-      [input.props.name]: input.props.defaultValue,
-    }), {});
+    this.state = this.inputs.reduce(
+      (formState, input) => ({
+        ...formState,
+        [input.props.name]: input.props.defaultValue,
+      }),
+      {},
+    );
   }
 
   componentWillReceiveProps(nextProps: _Props) {
@@ -112,7 +107,7 @@ class Form extends Component {
   onSubmit() {
     const errorMessages: _ValidationError[] = [];
 
-    this.inputs.forEach((child) => {
+    this.inputs.forEach(child => {
       if (!child.props.name) return;
       const error = this.refs[child.props.name].getValidationError();
 
@@ -144,7 +139,9 @@ class Form extends Component {
   }
 
   renderTextInputClone(input: any) {
-    const inputPosition = this.inputs.findIndex(otherInput => input.props.name === otherInput.props.name);
+    const inputPosition = this.inputs.findIndex(
+      otherInput => input.props.name === otherInput.props.name,
+    );
     const isLastInput = inputPosition === this.inputs.length - 1;
 
     return React.cloneElement(input, {
@@ -162,7 +159,7 @@ class Form extends Component {
         const nextInput = this.inputs[inputPosition + 1];
         this.refs[nextInput.props.name].focus();
       },
-      onChangeValue: (value) => {
+      onChangeValue: value => {
         this.setState({
           ...this.state,
           [input.props.name]: value,
@@ -171,14 +168,14 @@ class Form extends Component {
     });
   }
 
-  renderChild = (child) => {
+  renderChild = child => {
     if (child.props.type === SUBMIT_TYPE) {
       return React.cloneElement(child, { onPress: () => this.onSubmit(), key: 'submit' });
     }
     if (isInput(child)) return this.renderTextInputClone(child);
 
     return child;
-  }
+  };
 
   render() {
     const children = isArray(this.props.children) ? this.props.children : [this.props.children];
@@ -186,9 +183,7 @@ class Form extends Component {
     return (
       <View style={styles.scrollView}>
         <ScrollView scrollEnabled={false} keyboardShouldPersistTaps="always">
-        {
-          children.map(this.renderChild)
-        }
+          {children.map(this.renderChild)}
         </ScrollView>
       </View>
     );
