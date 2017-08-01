@@ -20,19 +20,9 @@ describe('<Form />', () => {
   it('submits the form', () => {
     const onSubmit = jest.fn();
     const form = mount(
-      <Form
-        onSubmit={onSubmit}
-      >
-        <TextInput
-          name="email"
-          type="email"
-          defaultValue="alexandrem@bam.tech"
-        />
-        <TextInput
-          name="password"
-          type="password"
-          defaultValue="Very secure password"
-        />
+      <Form onSubmit={onSubmit}>
+        <TextInput name="email" type="email" defaultValue="alexandrem@bam.tech" />
+        <TextInput name="password" type="password" defaultValue="Very secure password" />
         <TouchableOpacity type="submit">
           <Text>Submit</Text>
         </TouchableOpacity>
@@ -51,12 +41,7 @@ describe('<Form />', () => {
     const onValidationError = jest.fn();
     const form = mount(
       <Form onValidationError={onValidationError}>
-        <TextInput
-          name="email"
-          placeholder="Email"
-          type="email"
-          defaultValue="alexandrem"
-        />
+        <TextInput name="email" placeholder="Email" type="email" defaultValue="alexandrem" />
         <TouchableOpacity type="submit" />
       </Form>,
     );
