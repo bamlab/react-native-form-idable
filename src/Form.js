@@ -1,5 +1,3 @@
-// @flow
-
 import React, { Component } from 'react';
 import { Keyboard, ScrollView, StyleSheet, View } from 'react-native';
 import { isArray, merge } from 'lodash';
