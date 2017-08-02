@@ -1,5 +1,3 @@
-// @flow
-
 import validator from 'validator';
 
 export type _FormValidationOptions = {

@@ -1,5 +1,3 @@
-// @flow
-
 export default {
   fieldContainer: {
     alignSelf: 'stretch',
