@@ -84,13 +84,15 @@ class Form extends Component {
   }
 
   setInitialState() {
-    this.state.formData = this.inputs.reduce(
-      (formState, input) => ({
-        ...formState,
-        [input.props.name]: input.props.defaultValue,
-      }),
-      {},
-    );
+    this.state = {
+      formData: this.inputs.reduce(
+        (formState, input) => ({
+          ...formState,
+          [input.props.name]: input.props.defaultValue,
+        }),
+        {},
+      ),
+    };
   }
 
   componentWillReceiveProps(nextProps: _Props) {
@@ -160,26 +162,31 @@ class Form extends Component {
         this.refs[nextInput.props.name].focus();
       },
       onChangeText: value => {
-        this.setState({
-          ...this.state.formData,
-          [input.props.name]: value,
-        },
-        () => {
-          this.props.onChangeText(
-            this.state.formData,
-            Object.values(this.state.formData).reduce(
-              (isActive, inputValue) => isActive && !!inputValue,
-              true
-            )
-          );
-        });
+        this.setState(
+          {
+            ...this.state.formData,
+            [input.props.name]: value,
+          },
+          () => {
+            this.props.onChangeText(
+              this.state.formData,
+              Object.values(this.state.formData).reduce(
+                (isActive, inputValue) => isActive && !!inputValue,
+                true,
+              ),
+            );
+          },
+        );
       },
     });
   }
 
   renderChild = child => {
     if (child.props.type === SUBMIT_TYPE) {
-      return React.cloneElement(child, { onPress: () => this.onSubmit(), key: 'submit' });
+      return React.cloneElement(child, {
+        onPress: () => this.onSubmit(),
+        key: 'submit',
+      });
     }
     if (isInput(child)) return this.renderTextInputClone(child);
 
