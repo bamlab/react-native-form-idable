@@ -84,7 +84,7 @@ class Form extends Component {
   }
 
   setInitialState() {
-    this.state = this.inputs.reduce(
+    this.state.formData = this.inputs.reduce(
       (formState, input) => ({
         ...formState,
         [input.props.name]: input.props.defaultValue,
@@ -123,7 +123,7 @@ class Form extends Component {
 
     if (errorMessages.length === 0) {
       Keyboard.dismiss();
-      return this.props.onSubmit(this.state);
+      return this.props.onSubmit(this.state.formData);
     }
 
     if (this.props.toastErrors) {
@@ -161,13 +161,13 @@ class Form extends Component {
       },
       onChangeText: value => {
         this.setState({
-          ...this.state,
+          ...this.state.formData,
           [input.props.name]: value,
         },
         () => {
           this.props.onChangeText(
-            this.state,
-            Object.values(this.state).reduce(
+            this.state.formData,
+            Object.values(this.state.formData).reduce(
               (isActive, inputValue) => isActive && !!inputValue,
               true
             )
