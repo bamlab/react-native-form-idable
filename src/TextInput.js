@@ -129,8 +129,8 @@ class FormidableTextInput extends Component {
       isInputActive && formStyles.activefieldText,
     ];
     const placeholderAndSelectionColors = isInputActive
-      ? formStyles.activeSelectionColor || formStyles.selectionColor
-      : formStyles.selectionColor;
+      ? formStyles.activePlaceholderAndSelectionColors || formStyles.placeholderAndSelectionColors
+      : formStyles.placeholderAndSelectionColors;
 
     return (
       <View>
