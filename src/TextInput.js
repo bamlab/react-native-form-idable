@@ -6,7 +6,7 @@ type _TextInputType = 'name' | 'text' | 'email' | 'password' | 'digits';
 
 type _Props = {
   name: string,
-  onChangeValue: (value: string) => void,
+  onChangeText: (value: string) => void,
   getErrorMessage: (error: _ErrorType) => string,
   iconName: string,
   defaultValue: string,
@@ -35,6 +35,7 @@ class FormidableTextInput extends Component {
     showError: false,
     onFocus: () => {},
     onBlur: () => {},
+    onChangeText: () => {},
     getErrorMessage: () => {},
     defaultValue: "",
   };
@@ -53,7 +54,7 @@ class FormidableTextInput extends Component {
       text,
       errorMessage: null,
     });
-    if (this.props.onChangeValue) this.props.onChangeValue(text);
+    this.props.onChangeText(text);
   }
 
   onBlur() {
