@@ -19,6 +19,7 @@ type _Props = {
   isLoading: boolean,
   formStyles: any,
   onValidationError: () => _ValidationError[],
+  isCompleteOnChangeValue: () => void,
   getErrorMessage: (error: _Error, input) => string,
   errorMessages: { [errorType: _ErrorType]: string },
 };
@@ -58,6 +59,7 @@ class Form extends Component {
   static defaultProps = {
     submitText: 'validate',
     onSubmit: () => {},
+    isCompleteOnChangeValue: () => {},
   };
 
   constructor(props: _Props) {
@@ -161,6 +163,14 @@ class Form extends Component {
         this.setState({
           ...this.state,
           [input.props.name]: value,
+        },
+        () => {
+          this.props.isCompleteOnChangeValue(
+            Object.values(this.state).reduce(
+              (isActive, inputValue) => isActive && !!inputValue,
+              true
+            )
+          );
         });
       },
     });
