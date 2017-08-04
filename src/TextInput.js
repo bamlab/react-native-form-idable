@@ -35,6 +35,7 @@ class FormidableTextInput extends Component {
     showError: false,
     onFocus: () => {},
     onBlur: () => {},
+    getErrorMessage: () => {},
   };
 
   constructor(props: _Props) {
