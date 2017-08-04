@@ -19,7 +19,7 @@ type _Props = {
   isLoading: boolean,
   formStyles: any,
   onValidationError: () => _ValidationError[],
-  isCompleteOnChangeValue: () => void,
+  onChangeText: () => void,
   getErrorMessage: (error: _Error, input) => string,
   errorMessages: { [errorType: _ErrorType]: string },
 };
@@ -59,7 +59,7 @@ class Form extends Component {
   static defaultProps = {
     submitText: 'validate',
     onSubmit: () => {},
-    isCompleteOnChangeValue: () => {},
+    onChangeText: () => {},
   };
 
   constructor(props: _Props) {
@@ -159,13 +159,14 @@ class Form extends Component {
         const nextInput = this.inputs[inputPosition + 1];
         this.refs[nextInput.props.name].focus();
       },
-      onChangeValue: value => {
+      onChangeText: value => {
         this.setState({
           ...this.state,
           [input.props.name]: value,
         },
         () => {
-          this.props.isCompleteOnChangeValue(
+          this.props.onChangeText(
+            this.state,
             Object.values(this.state).reduce(
               (isActive, inputValue) => isActive && !!inputValue,
               true
