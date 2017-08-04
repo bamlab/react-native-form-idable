@@ -135,9 +135,11 @@ class FormidableTextInput extends Component {
     return (
       <View>
         {!!this.props.label &&
-          <Text style={formStyles.inputLabel}>
-            {this.props.label}
-          </Text>}
+          <View style={formStyles.inputLabelContainer}>
+            <Text style={formStyles.inputLabel}>
+              {this.props.label}
+            </Text>
+          </View>}
         <View style={containerStyle}>
           {
             // this.props.iconName ?
