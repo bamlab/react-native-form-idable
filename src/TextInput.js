@@ -18,6 +18,8 @@ type _Props = {
   disabled: boolean,
   refName: string,
   formStyles: any,
+  onFocus: () => void,
+  onBlur: () => void,
 };
 
 type _State = {
@@ -31,6 +33,8 @@ class FormidableTextInput extends Component {
 
   static defaultProps = {
     showError: false,
+    onFocus: () => {},
+    onBlur: () => {},
   };
 
   constructor(props: _Props) {
@@ -38,6 +42,7 @@ class FormidableTextInput extends Component {
     this.state = {
       errorMessage: null,
       text: this.props.defaultValue,
+      isFocused: false,
     };
   }
 
@@ -50,7 +55,14 @@ class FormidableTextInput extends Component {
   }
 
   onBlur() {
+    this.setState({ isFocused: false });
     this.getValidationError();
+    this.props.onBlur();
+  }
+
+  onFocus() {
+    this.setState({ isFocused: true });
+    this.props.onFocus();
   }
 
   getValidationError() {
@@ -99,11 +111,24 @@ class FormidableTextInput extends Component {
 
   render() {
     const { formStyles } = this.props;
+    const isInputActive = !!(this.state.text || this.state.isFocused);
 
     const containerStyle = [
       formStyles.fieldContainer,
+      isInputActive && formStyles.focusedFieldContainer,
       this.state.errorMessage ? formStyles.errorContainer : {},
     ];
+    const inputLabelStyle = [
+      formStyles.inputLabel,
+      isInputActive && formStyles.focusedInputLabel,
+    ];
+    const fieldTextStyle = [
+      formStyles.fieldText,
+      isInputActive && formStyles.focusedfieldText,
+    ];
+    const placeholderAndSelectionColors = isInputActive
+      ? formStyles.activeSelectionColor
+      : formStyles.selectionColor;
 
     return (
       <View>
@@ -118,14 +143,16 @@ class FormidableTextInput extends Component {
             //   : <View style={formStyles.iconPlaceholder} />
           }
           <TextInput
-            onBlur={() => this.onBlur()}
-            value={this.state.text || ''}
+            value={this.state.text || ""}
             underlineColorAndroid="transparent"
-            placeholderTextColor="white"
+            placeholderTextColor={placeholderAndSelectionColors}
+            selectionColor={placeholderAndSelectionColors}
             {...this.getTypeProps()}
             {...this.props}
+            onBlur={() => this.onBlur()}
+            onFocus={() => this.onFocus()}
             onChangeText={text => this.onChangeText(text)}
-            style={formStyles.fieldText}
+            style={fieldTextStyle}
             ref="input"
           />
         </View>
