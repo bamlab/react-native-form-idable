@@ -36,6 +36,7 @@ class FormidableTextInput extends Component {
     onFocus: () => {},
     onBlur: () => {},
     getErrorMessage: () => {},
+    defaultValue: "",
   };
 
   constructor(props: _Props) {
@@ -144,7 +145,7 @@ class FormidableTextInput extends Component {
             //   : <View style={formStyles.iconPlaceholder} />
           }
           <TextInput
-            value={this.state.text || ""}
+            value={this.state.text}
             underlineColorAndroid="transparent"
             placeholderTextColor={placeholderAndSelectionColors}
             selectionColor={placeholderAndSelectionColors}
