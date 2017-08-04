@@ -117,19 +117,19 @@ class FormidableTextInput extends Component {
 
     const containerStyle = [
       formStyles.fieldContainer,
-      isInputActive && formStyles.focusedFieldContainer,
+      isInputActive && formStyles.activeFieldContainer,
       this.state.errorMessage ? formStyles.errorContainer : {},
     ];
     const inputLabelStyle = [
       formStyles.inputLabel,
-      isInputActive && formStyles.focusedInputLabel,
+      isInputActive && formStyles.activeInputLabel,
     ];
     const fieldTextStyle = [
       formStyles.fieldText,
-      isInputActive && formStyles.focusedfieldText,
+      isInputActive && formStyles.activefieldText,
     ];
     const placeholderAndSelectionColors = isInputActive
-      ? formStyles.activeSelectionColor
+      ? formStyles.activeSelectionColor || formStyles.selectionColor
       : formStyles.selectionColor;
 
     return (
