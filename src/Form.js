@@ -164,17 +164,17 @@ class Form extends Component {
       onChangeText: value => {
         this.setState(
           {
-            ...this.state.formData,
-            [input.props.name]: value,
+            formData: {
+              ...this.state.formData,
+              [input.props.name]: value,
+            },
           },
           () => {
-            this.props.onChangeText(
-              this.state.formData,
-              Object.values(this.state.formData).reduce(
-                (isActive, inputValue) => isActive && !!inputValue,
-                true,
-              ),
+            const isFormComplete = Object.values(this.state.formData).reduce(
+              (isActive, inputValue) => isActive && !!inputValue,
+              true,
             );
+            this.props.onChangeText(this.state.formData, isFormComplete);
           },
         );
       },
