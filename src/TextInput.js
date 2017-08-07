@@ -37,7 +37,7 @@ class FormidableTextInput extends Component {
     onBlur: () => {},
     onChangeText: () => {},
     getErrorMessage: () => {},
-    defaultValue: "",
+    defaultValue: '',
   };
 
   constructor(props: _Props) {
@@ -121,20 +121,14 @@ class FormidableTextInput extends Component {
       isInputActive && formStyles.activeFieldContainer,
       this.state.errorMessage ? formStyles.errorContainer : {},
     ];
-    const inputLabelStyle = [
-      formStyles.inputLabel,
-      isInputActive && formStyles.activeInputLabel,
-    ];
-    const fieldTextStyle = [
-      formStyles.fieldText,
-      isInputActive && formStyles.activefieldText,
-    ];
+    const inputLabelStyle = [formStyles.inputLabel, isInputActive && formStyles.activeInputLabel];
+    const fieldTextStyle = [formStyles.fieldText, isInputActive && formStyles.activefieldText];
     const placeholderAndSelectionColors = isInputActive
       ? formStyles.activePlaceholderAndSelectionColors || formStyles.placeholderAndSelectionColors
       : formStyles.placeholderAndSelectionColors;
 
     return (
-      <View>
+      <View style={formStyles.inputContainerStyle}>
         {!!this.props.label &&
           <View style={formStyles.inputLabelContainer}>
             <Text style={formStyles.inputLabel}>
@@ -162,6 +156,7 @@ class FormidableTextInput extends Component {
           />
         </View>
         {this.props.showError &&
+          this.state.errorMessage &&
           <View style={formStyles.errorTextContainer}>
             <Text style={formStyles.error}>
               {this.state.errorMessage}
