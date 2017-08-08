@@ -98,14 +98,14 @@ All other commit types will trigger no new release.
 
 ## CSS properties of the formStyles Object
 
-**inputLabelContainer:** style applied to the label container (View)
-**inputLabel:** style applied to the text label (Text)
-**activeInputLabel:** style applied to the text label when focused or filled (Text)
-**fieldContainer:** style applied to the field container (View)
-**activeFieldContainer:** style applied to the field container when focused or filled (View)
-**fieldText:** style applied to the input (TextInput)
-**activefieldText:** style applied to the input when focused or filled (TextInput)
-**errorTextContainer:** style applied to the error container (View)
-**placeholderAndSelectionColors:** color of the selection bar and of the placeholder
-**activePlaceholderAndSelectionColors:** color of the selection bar and of the placeholder when focused or filled
-**error:** style applied to the error text (Text)
+- **inputLabelContainer:** style applied to the label container (View)
+- **inputLabel:** style applied to the text label (Text)
+- **activeInputLabel:** style applied to the text label when focused or filled (Text)
+- **fieldContainer:** style applied to the field container (View)
+- **activeFieldContainer:** style applied to the field container when focused or filled (View)
+- **fieldText:** style applied to the input (TextInput)
+- **activefieldText:** style applied to the input when focused or filled (TextInput)
+- **errorTextContainer:** style applied to the error container (View)
+- **placeholderAndSelectionColors:** color of the selection bar and of the placeholder
+- **activePlaceholderAndSelectionColors:** color of the selection bar and of the placeholder when focused or filled
+- **error:** style applied to the error text (Text)
