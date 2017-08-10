@@ -22,6 +22,7 @@ type _Props = {
   onChangeText: () => void,
   getErrorMessage: (error: _Error, input) => string,
   errorMessages: { [errorType: _ErrorType]: string },
+  usePackageValidation: boolean,
 };
 
 const styles = StyleSheet.create({
@@ -60,6 +61,7 @@ class Form extends Component {
     submitText: 'validate',
     onSubmit: () => {},
     onChangeText: () => {},
+    usePackageValidation: true,
   };
 
   constructor(props: _Props) {
@@ -109,19 +111,20 @@ class Form extends Component {
   onSubmit() {
     const errorMessages: _ValidationError[] = [];
 
-    this.inputs.forEach(child => {
-      if (!child.props.name) return;
-      const error = this.refs[child.props.name].getValidationError();
+    if (this.props.usePackageValidation)
+      this.inputs.forEach(child => {
+        if (!child.props.name) return;
+        const error = this.refs[child.props.name].getValidationError();
 
-      if (error) {
-        errorMessages.push({
-          name: child.props.name,
-          placeholder: child.props.placeholder,
-          message: this.getErrorMessage(error, child),
-          error,
-        });
-      }
-    });
+        if (error) {
+          errorMessages.push({
+            name: child.props.name,
+            placeholder: child.props.placeholder,
+            message: this.getErrorMessage(error, child),
+            error,
+          });
+        }
+      });
 
     if (errorMessages.length === 0) {
       Keyboard.dismiss();
