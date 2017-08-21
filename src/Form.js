@@ -1,3 +1,5 @@
+// @flow
+
 import React, { Component } from 'react';
 import { Keyboard, ScrollView, StyleSheet, View } from 'react-native';
 import { isArray, merge } from 'lodash';
@@ -5,23 +7,21 @@ import Toast from 'react-native-root-toast';
 import Polyglot from 'node-polyglot';
 import defaultStyles from './defaultStyles';
 
-type _ValidationError = {
-  input: any,
-  message: string,
-};
+type _FormData = { [inputKey: string]: any };
 
 type _Props = {
   children: any,
-  submitText: string,
-  onSubmit: () => void,
-  scrollable: boolean,
-  toastErrors: boolean,
-  isLoading: boolean,
+  onSubmit: (formData: _FormData) => void,
+  onChangeText: (formData: _FormData, isFormComplete: boolean) => void,
   formStyles: any,
-  onValidationError: () => _ValidationError[],
-  onChangeText: () => void,
-  getErrorMessage: (error: _Error, input) => string,
+  toastErrors: boolean,
+  onValidationError: (errorMessages: _ValidationError[]) => void,
+  getErrorMessage: (error: _Error, input: _ReactComponent) => string,
   errorMessages: { [errorType: _ErrorType]: string },
+};
+
+type _State = {
+  formData: _FormData,
 };
 
 const styles = StyleSheet.create({
@@ -29,13 +29,6 @@ const styles = StyleSheet.create({
     alignSelf: 'stretch',
   },
 });
-
-type _ErrorType = 'required' | 'invalid' | 'digits' | 'length' | 'minLength';
-
-type _Error = {
-  type: _ErrorType,
-  data: Object,
-};
 
 const errorMessages = {
   required: '%{placeholder} : Ce champ est requis',
@@ -51,13 +44,12 @@ const isInput = component => component.props.type && component.props.type !== SU
 
 class Form extends Component {
   inputs: Array<Object>;
-  state: Object;
+  state: _State;
   submitButton: Object;
   formStyles: Object;
   polyglot: any;
 
   static defaultProps = {
-    submitText: 'validate',
     onSubmit: () => {},
     onChangeText: () => {},
   };
@@ -115,6 +107,7 @@ class Form extends Component {
 
       if (error) {
         errorMessages.push({
+          input: child,
           name: child.props.name,
           placeholder: child.props.placeholder,
           message: this.getErrorMessage(error, child),
@@ -181,7 +174,7 @@ class Form extends Component {
     });
   }
 
-  renderChild = child => {
+  renderChild = (child: _ReactComponent) => {
     if (child.props.type === SUBMIT_TYPE) {
       return React.cloneElement(child, {
         onPress: () => this.onSubmit(),

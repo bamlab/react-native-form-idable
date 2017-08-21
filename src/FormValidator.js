@@ -1,15 +1,9 @@
+// @flow
+
 import validator from 'validator';
 
-export type _FormValidationOptions = {
-  text?: ?string,
-  minLength?: number,
-  maxLength?: number,
-  type?: string,
-  required?: boolean,
-};
-
 export default class FormValidator {
-  static validate(options: _FormValidationOptions) {
+  static validate(options: _FormValidationOptions): ?_Error {
     const { text, minLength, maxLength, type, required } = options;
 
     if (required && !text) {

@@ -7,33 +7,40 @@
 
 ; Ignore unexpected extra "@providesModule"
 .*/node_modules/.*/node_modules/fbjs/.*
-.*/node_modules/@exponent/ex-navigation
 
 ; Ignore duplicate module providers
 ; For RN Apps installed via npm, "Libraries" folder is inside
 ; "node_modules/react-native" but in the source repo it is in the root
 .*/Libraries/react-native/React.js
 .*/Libraries/react-native/ReactNative.js
-.*/Libraries/Components/StaticContainer.js
-.*/node_modules/react-native/Libraries/EventEmitter/EventSubscriptionVendor.js
-.*/node_modules/react-native/Libraries/EventEmitter/EmitterSubscription.js
-.*/node_modules/react-native/Libraries/EventEmitter/EventSubscription.js
-.*/node_modules/react-native-form-idable/src/Form.js
-.*/node_modules/victory-native/*
-.*/node_modules/victory-pie-native/*
+
+.*/node_modules/react-navigation/examples/.*
+.*/node_modules/react-navigation/.*-test\.js
+.*/node_modules/react-navigation/website/.*
+.*/node_modules/react-static-container/.*
+.*/node_modules/flow-coverage-report/.*
+
+; Ignore empty file
+.*/node_modules/npmconf/test/fixtures/package.json
 
 [include]
 
 [libs]
 node_modules/react-native/Libraries/react-native/react-native-interface.js
 node_modules/react-native/flow
+src/flow/
 
 [options]
 emoji=true
 
 module.system=haste
+
+module.file_ext=.js
+module.file_ext=.jsx
+module.file_ext=.ios.js
+
 experimental.strict_type_args=true
-esproposal.decorators=ignore
+
 munge_underscores=true
 
 module.name_mapper='^[./a-zA-Z0-9$_-]+\.\(bmp\|gif\|jpg\|jpeg\|png\|psd\|svg\|webp\|m4v\|mov\|mp4\|mpeg\|mpg\|webm\|aac\|aiff\|caf\|m4a\|mp3\|wav\|html\|pdf\)$' -> 'RelativeImageStub'

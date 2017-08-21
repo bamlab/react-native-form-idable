@@ -1,3 +1,5 @@
+// @flow
+
 export { default as DatePicker } from './DatePicker';
 export { default as DisableInputKeyboard } from './DisableInputKeyboard';
 export { default as Form } from './Form';

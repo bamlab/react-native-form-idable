@@ -1,3 +1,5 @@
+// @flow
+
 import React, { PureComponent } from 'react';
 import { Easing, Keyboard } from 'react-native';
 import Modal from '@bam.tech/react-native-modalbox';
@@ -7,9 +9,10 @@ import RootSiblings from 'react-native-root-siblings';
 type PropsType = {
   style: Object,
   easingAnimation: () => void,
+  children: any,
 };
 
-const renderModal = (props: PropsType, open: boolean) =>
+const renderModal = (props: PropsType, open: ?boolean) =>
   <Modal
     backdrop={false}
     position="bottom"
@@ -27,12 +30,12 @@ let keyboardModalCount = 0;
 let keyboardDidShowListener = null;
 let currentProps;
 
-const updateKeyboardModalComponent = (props: PropsType, open: boolean) => {
+const updateKeyboardModalComponent = (props: PropsType, open: ?boolean) => {
   if (open) currentProps = props;
   if (keyboardModalInstance) keyboardModalInstance.update(renderModal(props, open));
 };
 
-const open = (keyboardComponent: _ReactComponent) => {
+const open = (keyboardComponent: any) => {
   if (displayedKeyboardComponent) displayedKeyboardComponent.displayed = false;
 
   displayedKeyboardComponent = keyboardComponent;
@@ -58,8 +61,8 @@ const removeKeyboardModalComponent = () => {
   keyboardModalCount--;
 
   if (keyboardModalCount === 0) {
-    keyboardDidShowListener.remove();
-    keyboardModalInstance.remove();
+    if (keyboardDidShowListener) keyboardDidShowListener.remove();
+    if (keyboardModalInstance) keyboardModalInstance.remove();
   }
 };
 
@@ -74,11 +77,13 @@ export default class KeyboardModal extends PureComponent {
     easingAnimation: Easing.ease,
   };
 
+  displayed: boolean = false;
+
   componentWillMount() {
     createKeyboardModalComponent(this.props);
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps(nextProps: PropsType) {
     if (this.displayed) {
       updateKeyboardModalComponent(nextProps);
     }
