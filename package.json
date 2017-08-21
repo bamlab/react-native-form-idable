@@ -4,7 +4,7 @@
   "description": "",
   "main": "src/index.js",
   "scripts": {
-    "test": "jest",
+    "test": "flow && jest",
     "semantic-release": "semantic-release pre && npm publish && semantic-release post",
     "commitmsg": "validate-commit-msg",
     "commit": "git-cz"
@@ -51,10 +51,7 @@
   },
   "jest": {
     "preset": "react-native",
-    "transformIgnorePatterns": [
-      "node_modules/(?!@exponent/ex-navigation",
-      ")"
-    ],
+    "transformIgnorePatterns": ["node_modules/(?!@exponent/ex-navigation", ")"],
     "cacheDirectory": "<rootDir>/jest/tmp"
   }
 }

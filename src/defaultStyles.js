@@ -4,7 +4,6 @@ export default {
     flexDirection: 'row',
     backgroundColor: 'rgba(255, 255, 255, 0.21)',
     alignItems: 'center',
-    height: 48,
   },
   fieldText: {
     color: 'white',
