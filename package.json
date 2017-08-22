@@ -28,7 +28,7 @@
     "react-addons-test-utils": "^15.4.2",
     "react-dom": "^15.4.2",
     "react-native": "^0.42.3",
-    "semantic-release": "^6.3.2",
+    "semantic-release": "^7.0.2",
     "validate-commit-msg": "^2.11.2"
   },
   "dependencies": {
@@ -51,7 +51,10 @@
   },
   "jest": {
     "preset": "react-native",
-    "transformIgnorePatterns": ["node_modules/(?!@exponent/ex-navigation", ")"],
+    "transformIgnorePatterns": [
+      "node_modules/(?!@exponent/ex-navigation",
+      ")"
+    ],
     "cacheDirectory": "<rootDir>/jest/tmp"
   }
 }
