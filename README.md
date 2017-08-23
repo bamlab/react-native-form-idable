@@ -76,6 +76,12 @@ class MyAwesomeForm extends Component {
 export default MyAwesomeForm;
 ```
 
+## Example
+
+There's an expo example available in `./example`.
+
+You can [try out the published version](https://exp.host/@almouro/example) with the Expo app.
+
 ## Contributing
 
 Commits follow the Angular commit convention to create releases automatically.

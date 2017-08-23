@@ -20,6 +20,9 @@
 .*/node_modules/react-static-container/.*
 .*/node_modules/flow-coverage-report/.*
 
+; Ignore example
+<PROJECT_ROOT>/example/.*
+
 ; Ignore empty file
 .*/node_modules/npmconf/test/fixtures/package.json
 
