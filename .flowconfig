@@ -22,6 +22,7 @@
 
 ; Ignore empty file
 .*/node_modules/npmconf/test/fixtures/package.json
+./example/.*
 
 [include]
 
