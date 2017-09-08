@@ -98,6 +98,8 @@ All other commit types will trigger no new release.
 
 ## CSS properties of the formStyles Object
 
+- **inputContainerStyle:** style applied to the global container (View)
+- **nonEditableInput:** style applied to the global container when TextInput is not editable
 - **inputLabelContainer:** style applied to the label container (View)
 - **inputLabel:** style applied to the text label (Text)
 - **activeInputLabel:** style applied to the text label when focused or filled (Text)

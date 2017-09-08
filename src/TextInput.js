@@ -16,7 +16,6 @@ type _Props = {
   type: _TextInputType,
   placeholder: string,
   label: string,
-  disabled: boolean,
   refName: string,
   formStyles: any,
   onFocus: () => void,
@@ -133,7 +132,12 @@ class FormidableTextInput extends Component {
       : formStyles.placeholderAndSelectionColors;
 
     return (
-      <View style={formStyles.inputContainerStyle}>
+      <View
+        style={[
+          formStyles.inputContainerStyle,
+          this.props.editable === false && formStyles.nonEditableInput,
+        ]}
+      >
         {!!this.props.label && (
           <View style={formStyles.inputLabelContainer}>
             <Text style={formStyles.inputLabel}>{this.props.label}</Text>
