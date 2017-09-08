@@ -12,6 +12,7 @@ type _Props = {
   defaultValue: string,
   required: boolean,
   showError: boolean,
+  customErrorMessage: string,
   type: _TextInputType,
   placeholder: string,
   label: string,
@@ -35,6 +36,7 @@ class FormidableTextInput extends Component {
 
   static defaultProps = {
     showError: false,
+    customErrorMessage: '',
     onFocus: () => {},
     onBlur: () => {},
     onChangeText: () => {},
@@ -131,13 +133,12 @@ class FormidableTextInput extends Component {
       : formStyles.placeholderAndSelectionColors;
 
     return (
-      <View>
-        {!!this.props.label &&
+      <View style={formStyles.inputContainerStyle}>
+        {!!this.props.label && (
           <View style={formStyles.inputLabelContainer}>
-            <Text style={formStyles.inputLabel}>
-              {this.props.label}
-            </Text>
-          </View>}
+            <Text style={formStyles.inputLabel}>{this.props.label}</Text>
+          </View>
+        )}
         <View style={containerStyle}>
           {
             // this.props.iconName ?
@@ -159,12 +160,13 @@ class FormidableTextInput extends Component {
             ref="input"
           />
         </View>
-        {this.props.showError &&
+        {(this.props.customErrorMessage || (this.props.showError && this.state.errorMessage)) && (
           <View style={formStyles.errorTextContainer}>
             <Text style={formStyles.error}>
-              {this.state.errorMessage}
+              {this.props.customErrorMessage || this.state.errorMessage}
             </Text>
-          </View>}
+          </View>
+        )}
       </View>
     );
   }
