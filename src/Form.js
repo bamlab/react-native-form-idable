@@ -5,6 +5,7 @@ import { Keyboard, ScrollView, StyleSheet, View } from 'react-native';
 import { isArray, merge } from 'lodash';
 import Toast from 'react-native-root-toast';
 import Polyglot from 'node-polyglot';
+import { KeyboardModal } from '.';
 import defaultStyles from './defaultStyles';
 
 type _FormData = { [inputKey: string]: any };
@@ -121,6 +122,7 @@ class Form extends Component {
 
     if (errorMessages.length === 0) {
       Keyboard.dismiss();
+      KeyboardModal.dismiss();
       return this.props.onSubmit(this.state.formData);
     }
 

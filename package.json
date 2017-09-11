@@ -55,6 +55,10 @@
       "node_modules/(?!@exponent/ex-navigation",
       ")"
     ],
+    "testPathIgnorePatterns": [
+      "/node_modules/",
+      "/example/"
+    ],
     "cacheDirectory": "<rootDir>/jest/tmp"
   }
 }
