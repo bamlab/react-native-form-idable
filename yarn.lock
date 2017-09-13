@@ -9,6 +9,20 @@
     create-react-class "^15.6.0"
     prop-types "^15.5.10"
 
+"@bam.tech/react-native-root-siblings@^1.2.1":
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/@bam.tech/react-native-root-siblings/-/react-native-root-siblings-1.2.1.tgz#4d948afc29837646299246107c8f09ae4764fd35"
+  dependencies:
+    static-container "^1.0.0"
+    wolfy87-eventemitter "^5.2.2"
+
+"@bam.tech/react-native-root-toast@^1.3.1":
+  version "1.3.1"
+  resolved "https://registry.yarnpkg.com/@bam.tech/react-native-root-toast/-/react-native-root-toast-1.3.1.tgz#beb0e20791e18b8030bb49db056eee65b86ad631"
+  dependencies:
+    "@bam.tech/react-native-root-siblings" "^1.2.1"
+    prop-types "^15.5.10"
+
 "@semantic-release/commit-analyzer@^2.0.0":
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/@semantic-release/commit-analyzer/-/commit-analyzer-2.0.0.tgz#924d1e2c30167c6a472bed9f66ee8f8e077489b2"
@@ -4196,7 +4210,7 @@ react-dom@^15.4.2:
     loose-envify "^1.1.0"
     object-assign "^4.1.0"
 
-react-native-root-siblings@^1.0.7, react-native-root-siblings@^1.2.1:
+react-native-root-siblings@^1.0.7:
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/react-native-root-siblings/-/react-native-root-siblings-1.2.1.tgz#6f8d0e711dbf9aef4e57e73aea751372b5aefcff"
   dependencies:
@@ -5301,6 +5315,10 @@ wide-align@^1.1.0:
 window-size@0.1.0:
   version "0.1.0"
   resolved "https://registry.yarnpkg.com/window-size/-/window-size-0.1.0.tgz#5438cd2ea93b202efa3a19fe8887aee7c94f9c9d"
+
+wolfy87-eventemitter@^5.2.2:
+  version "5.2.2"
+  resolved "https://registry.yarnpkg.com/wolfy87-eventemitter/-/wolfy87-eventemitter-5.2.2.tgz#9cb8e58f6d53814602b91128dd81cad090197a4d"
 
 word-wrap@^1.0.3:
   version "1.2.1"

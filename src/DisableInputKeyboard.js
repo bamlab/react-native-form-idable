@@ -8,7 +8,6 @@ import {
   View,
 } from 'react-native';
 import { format, formatDistance, formatRelative, subDays } from 'date-fns';
-import RootSiblings from 'react-native-root-siblings';
 import { Form, KeyboardModal, TextInput } from '.';
 
 type PropsType = {

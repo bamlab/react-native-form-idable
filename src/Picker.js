@@ -1,7 +1,6 @@
 import React, { PureComponent } from 'react';
 import { Picker, StyleSheet, TouchableOpacity, TextInput as RNInput, View } from 'react-native';
 import { format, formatDistance, formatRelative, subDays } from 'date-fns';
-import RootSiblings from 'react-native-root-siblings';
 import { DisableInputKeyboard, Form, KeyboardModal, TextInput } from '.';
 
 type PropsType = {};
