@@ -1,8 +1,8 @@
 // @flow
 
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { Keyboard, ScrollView, StyleSheet, View } from 'react-native';
-import { isArray, merge } from 'lodash';
+import { isArray, isFunction, merge } from 'lodash';
 import Toast from '@bam.tech/react-native-root-toast';
 import Polyglot from 'node-polyglot';
 import { KeyboardModal } from '.';
@@ -33,18 +33,18 @@ const styles = StyleSheet.create({
 });
 
 const errorMessages = {
-  required: '%{placeholder} : Ce champ est requis',
-  invalid: '%{placeholder} : Email invalide',
-  digits: '%{placeholder} : Ce champ ne doit comporter que des chiffres',
-  minLength: '%{placeholder} : Ce champ doit faire au moins %{minLength} caractères',
-  length: '{%placeholder%} : Ce champ doit faire {% length %} caractères',
+  required: '%{displayName} : Ce champ est requis',
+  invalid: '%{displayName} : Email invalide',
+  digits: '%{displayName} : Ce champ ne doit comporter que des chiffres',
+  minLength: '%{displayName} : Ce champ doit faire au moins %{minLength} caractères',
+  length: '{%displayName%} : Ce champ doit faire {% length %} caractères',
 };
 
 const SUBMIT_TYPE = 'submit';
 
 const isInput = component => component.props.type && component.props.type !== SUBMIT_TYPE;
 
-class Form extends Component {
+class Form extends PureComponent {
   inputs: Array<Object>;
   state: _State;
   submitButton: Object;
@@ -98,16 +98,25 @@ class Form extends Component {
   getErrorMessage = (error: _Error, input: any) => {
     if (this.props.getErrorMessage) return this.props.getErrorMessage(error, input);
 
-    return this.polyglot.t(error.type, error.options);
+    const { options } = error;
+
+    return this.polyglot.t(error.type, {
+      ...options,
+      displayName: options.displayName || options.label || options.placeholder,
+    });
   };
 
   onSubmit() {
     const errorMessages: _ValidationError[] = [];
 
-    if (this.props.usePackageValidation)
-      this.inputs.forEach(child => {
+    if (this.props.usePackageValidation) {
+      this.inputs.forEach((child) => {
         if (!child.props.name) return;
-        const error = this.refs[child.props.name].getValidationError();
+
+        const childRef = this.refs[child.props.name];
+        const error = isFunction(childRef.getValidationError)
+          ? childRef.getValidationError()
+          : null;
 
         if (error) {
           errorMessages.push({
@@ -119,6 +128,7 @@ class Form extends Component {
           });
         }
       });
+    }
 
     if (errorMessages.length === 0) {
       Keyboard.dismiss();
@@ -157,9 +167,11 @@ class Form extends Component {
         }
 
         const nextInput = this.inputs[inputPosition + 1];
-        this.refs[nextInput.props.name].focus();
+        const nextInputRef = this.refs[nextInput.props.name];
+
+        if (isFunction(nextInputRef.focus)) nextInputRef.focus();
       },
-      onChangeText: value => {
+      onChangeText: (value) => {
         this.setState(
           {
             formData: {

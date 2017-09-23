@@ -1,6 +1,9 @@
-import React, { Component } from 'react';
-import { Text, TextInput, View } from 'react-native';
+// @flow
+
+import React, { PureComponent } from 'react';
+import { TextInput } from 'react-native';
 import FormValidator from './FormValidator';
+import InputContainer from './InputContainer';
 
 type _TextInputType = 'name' | 'text' | 'email' | 'password' | 'digits';
 
@@ -29,7 +32,7 @@ type _State = {
   isActive: boolean,
 };
 
-class FormidableTextInput extends Component {
+class FormidableTextInput extends PureComponent {
   props: _Props;
   state: _State;
 
@@ -120,58 +123,28 @@ class FormidableTextInput extends Component {
     const { formStyles } = this.props;
     const isInputActive = this.state.isFocused;
 
-    const containerStyle = [
-      formStyles.fieldContainer,
-      isInputActive && formStyles.activeFieldContainer,
-      this.state.errorMessage ? formStyles.errorContainer : {},
-    ];
-    const inputLabelStyle = [formStyles.inputLabel, isInputActive && formStyles.activeInputLabel];
     const fieldTextStyle = [formStyles.fieldText, isInputActive && formStyles.activefieldText];
     const placeholderAndSelectionColors = isInputActive
       ? formStyles.activePlaceholderAndSelectionColors || formStyles.placeholderAndSelectionColors
       : formStyles.placeholderAndSelectionColors;
 
     return (
-      <View
-        style={[
-          formStyles.inputContainerStyle,
-          this.props.editable === false && formStyles.nonEditableInput,
-        ]}
-      >
-        {!!this.props.label && (
-          <View style={formStyles.inputLabelContainer}>
-            <Text style={formStyles.inputLabel}>{this.props.label}</Text>
-          </View>
-        )}
-        <View style={containerStyle}>
-          {
-            // this.props.iconName ?
-            //   <Icon name={this.props.iconName} size={iconSize} style={formStyles.icon} />
-            //   : <View style={formStyles.iconPlaceholder} />
-          }
-          <TextInput
-            value={this.state.text}
-            underlineColorAndroid="transparent"
-            placeholderTextColor={placeholderAndSelectionColors}
-            selectionColor={placeholderAndSelectionColors}
-            {...this.getTypeProps()}
-            {...this.props}
-            onBlur={() => this.onBlur()}
-            onFocus={() => this.onFocus()}
-            onChangeText={text => this.onChangeText(text)}
-            style={fieldTextStyle}
-            cursor={{ start: this.state.text.length, end: this.state.text.length }}
-            ref="input"
-          />
-        </View>
-        {(this.props.customErrorMessage || (this.props.showError && this.state.errorMessage)) && (
-          <View style={formStyles.errorTextContainer}>
-            <Text style={formStyles.error}>
-              {this.props.customErrorMessage || this.state.errorMessage}
-            </Text>
-          </View>
-        )}
-      </View>
+      <InputContainer {...this.props} active={isInputActive} errorMessage={this.state.errorMessage}>
+        <TextInput
+          value={this.state.text}
+          underlineColorAndroid="transparent"
+          placeholderTextColor={placeholderAndSelectionColors}
+          selectionColor={placeholderAndSelectionColors}
+          {...this.getTypeProps()}
+          {...this.props}
+          onBlur={() => this.onBlur()}
+          onFocus={() => this.onFocus()}
+          onChangeText={text => this.onChangeText(text)}
+          style={fieldTextStyle}
+          cursor={{ start: this.state.text.length, end: this.state.text.length }}
+          ref="input"
+        />
+      </InputContainer>
     );
   }
 }
