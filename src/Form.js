@@ -1,7 +1,7 @@
 // @flow
 
 import React, { PureComponent } from 'react';
-import { Keyboard, ScrollView, StyleSheet, View } from 'react-native';
+import { Keyboard, ScrollView } from 'react-native';
 import { isArray, isFunction, merge } from 'lodash';
 import Toast from '@bam.tech/react-native-root-toast';
 import Polyglot from 'node-polyglot';
@@ -12,6 +12,7 @@ type _FormData = { [inputKey: string]: any };
 
 type _Props = {
   children: any,
+  style?: Object,
   onSubmit: (formData: _FormData) => void,
   onChangeText: (formData: _FormData, isFormComplete: boolean) => void,
   formStyles: any,
@@ -26,12 +27,6 @@ type _Props = {
 type _State = {
   formData: _FormData,
 };
-
-const styles = StyleSheet.create({
-  scrollView: {
-    alignSelf: 'stretch',
-  },
-});
 
 const errorMessages = {
   required: '%{displayName} : Ce champ est requis',
@@ -50,6 +45,7 @@ class Form extends PureComponent {
     onSubmit: () => {},
     onChangeText: () => {},
     usePackageValidation: true,
+    style: {},
   };
 
   props: _Props;
@@ -216,11 +212,13 @@ class Form extends PureComponent {
     const children = isArray(this.props.children) ? this.props.children : [this.props.children];
 
     return (
-      <View style={styles.scrollView}>
-        <ScrollView scrollEnabled={false} keyboardShouldPersistTaps="always">
-          {children.map(this.renderChild)}
-        </ScrollView>
-      </View>
+      <ScrollView
+        scrollEnabled={false}
+        keyboardShouldPersistTaps="always"
+        contentContainerStyle={this.props.style}
+      >
+        {children.map(this.renderChild)}
+      </ScrollView>
     );
   }
 }
