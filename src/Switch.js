@@ -9,14 +9,9 @@ type _Props = {
   name: string,
   onChangeText: (value: string) => void,
   getErrorMessage: (error: _Error) => string,
-  iconName: string,
   defaultValue: string,
   required: boolean,
-  showError: boolean,
-  customErrorMessage: string,
   placeholder: string,
-  label: string,
-  refName: string,
   formStyles: any,
 };
 
@@ -28,9 +23,6 @@ type _State = {
 };
 
 class FormidableSwitch extends PureComponent {
-  props: _Props;
-  state: _State;
-
   static defaultProps = {
     showError: false,
     customErrorMessage: '',
@@ -40,6 +32,9 @@ class FormidableSwitch extends PureComponent {
     getErrorMessage: () => {},
     defaultValue: false,
   };
+
+  props: _Props;
+  state: _State;
 
   constructor(props: _Props) {
     super(props);
@@ -78,7 +73,7 @@ class FormidableSwitch extends PureComponent {
     const fieldTextStyle = [formStyles.fieldText];
 
     return (
-      <InputContainer {...this.props}>
+      <InputContainer errorMessage={this.state.errorMessage} {...this.props}>
         <Switch
           value={this.state.text}
           style={fieldTextStyle}

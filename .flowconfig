@@ -22,6 +22,7 @@
 
 ; Ignore example
 <PROJECT_ROOT>/example/.*
+<PROJECT_ROOT>/FormidableExample/.*
 
 ; Ignore empty file
 .*/node_modules/npmconf/test/fixtures/package.json

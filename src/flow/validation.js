@@ -1,13 +1,15 @@
 // @flow
+/* eslint-disable no-undef */
 
 declare type _ErrorType = 'required' | 'invalid' | 'digits' | 'length' | 'minLength' | 'numeric';
 
 declare type _FormValidationOptions = {
   text?: ?string,
-  minLength?: number,
-  maxLength?: number,
+  minLength?: ?number,
+  maxLength?: ?number,
   type?: string,
   required?: boolean,
+  placeholder: string,
 };
 
 declare type _Error = {

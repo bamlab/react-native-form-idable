@@ -1,39 +1,40 @@
-import React, { PureComponent } from 'react';
-import {
-  DatePickerIOS,
-  StyleSheet,
-  Keyboard,
-  TouchableOpacity,
-  TextInput as RNInput,
-  View,
-} from 'react-native';
-import { format, formatDistance, formatRelative, subDays } from 'date-fns';
-import { DisableInputKeyboard, Form, KeyboardModal, TextInput } from '.';
+// @flow
 
-type PropsType = {
+import React, { PureComponent } from 'react';
+import { DatePickerIOS, View } from 'react-native';
+import { format } from 'date-fns';
+import { DisableInputKeyboard, KeyboardModal, TextInput } from '.';
+import { type _Props as _InputProps } from './TextInput';
+
+type _Props = _InputProps & {
   format: string,
+  onChangeText: (value: any) => void,
+  name: string,
+};
+
+type _State = {
+  date: Date,
+  showValue: boolean,
 };
 
 export default class FormidableDatePicker extends PureComponent {
-  props: PropsType;
-  pickerModalComponent: any;
-
   static defaultProps = {
     format: 'D MMMM YYYY',
   };
 
-  constructor(props) {
+  props: _Props;
+  state: _State;
+
+  constructor(props: _Props) {
     super(props);
     this.state = {
       date: new Date(),
       showValue: false,
     };
   }
-  props: PropsType;
 
-  getValidationError() {
-    return this.refs.input.getValidationError();
-  }
+  pickerModalComponent: KeyboardModal;
+  input: TextInput;
 
   focus() {
     this.openPicker();
@@ -43,7 +44,7 @@ export default class FormidableDatePicker extends PureComponent {
     this.pickerModalComponent.open();
   };
 
-  onChangeValue = (value) => {
+  onChangeValue = (value: Date) => {
     this.setState({ date: value, showValue: true });
     this.props.onChangeText(value);
   };
@@ -53,12 +54,19 @@ export default class FormidableDatePicker extends PureComponent {
       <View>
         <DisableInputKeyboard onPress={this.openPicker}>
           <TextInput
-            ref="input"
+            ref={(ref) => {
+              this.input = ref;
+            }}
             value={this.state.showValue ? format(this.state.date, this.props.format) : null}
             {...this.props}
           />
         </DisableInputKeyboard>
-        <KeyboardModal ref={ref => (this.pickerModalComponent = ref)} {...this.props}>
+        <KeyboardModal
+          ref={(ref) => {
+            this.pickerModalComponent = ref;
+          }}
+          {...this.props}
+        >
           <DatePickerIOS date={this.state.date} onDateChange={this.onChangeValue} {...this.props} />
         </KeyboardModal>
       </View>

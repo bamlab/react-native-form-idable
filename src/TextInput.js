@@ -7,54 +7,72 @@ import InputContainer from './InputContainer';
 
 type _TextInputType = 'name' | 'text' | 'email' | 'password' | 'digits';
 
-type _Props = {
+export type _Props = {
   name: string,
-  onChangeText: (value: string) => void,
-  getErrorMessage: (error: _Error) => string,
-  iconName: string,
-  defaultValue: string,
-  required: boolean,
-  showError: boolean,
-  customErrorMessage: string,
-  type: _TextInputType,
-  placeholder: string,
-  label: string,
-  refName: string,
-  formStyles: any,
-  onFocus: () => void,
-  onBlur: () => void,
+  formStyles: Object,
+  type?: _TextInputType,
+  label?: string,
+
+  // Validation
+  getErrorMessage: ?(error: _Error) => ?string,
+  errorMessage?: ?string,
+  showError?: boolean,
+
+  // Validation attributes
+  maxLength?: ?number,
+  minLength?: ?number,
+  required?: boolean,
+
+  // RN Text Input props
+  onChangeText: (value: any) => void,
+  placeholder?: string,
+  defaultValue?: string,
+  editable?: boolean,
+  onFocus?: () => void,
+  onBlur?: () => void,
 };
 
 type _State = {
-  text: ?string,
+  text: string,
   errorMessage: ?string,
   isFocused: boolean,
   isActive: boolean,
 };
 
 class FormidableTextInput extends PureComponent {
-  props: _Props;
-  state: _State;
-
   static defaultProps = {
+    formStyles: {},
     showError: false,
-    customErrorMessage: '',
     onFocus: () => {},
     onBlur: () => {},
-    onChangeText: () => {},
-    getErrorMessage: () => {},
+    // eslint-disable-next-line no-unused-vars
+    onChangeText: (value: any) => undefined,
+    getErrorMessage: () => null,
     defaultValue: '',
+    type: 'name',
+    placeholder: '',
+    editable: true,
+    required: false,
+    maxLength: null,
+    minLength: null,
+    label: '',
+    errorMessage: null,
   };
+
+  props: _Props;
+  state: _State;
 
   constructor(props: _Props) {
     super(props);
     this.state = {
       errorMessage: null,
-      text: this.props.defaultValue,
+      text: this.props.defaultValue || '',
       isFocused: false,
       isActive: false,
     };
   }
+
+  input: TextInput;
 
   onChangeText(text: string) {
     this.setState({
@@ -67,12 +85,12 @@ class FormidableTextInput extends PureComponent {
   onBlur() {
     this.setState({ isFocused: false });
     this.getValidationError();
-    this.props.onBlur();
+    if (this.props.onBlur) this.props.onBlur();
   }
 
   onFocus() {
     this.setState({ isFocused: true });
-    this.props.onFocus();
+    if (this.props.onFocus) this.props.onFocus();
   }
 
   getValidationError() {
@@ -82,7 +100,9 @@ class FormidableTextInput extends PureComponent {
     });
 
     if (error) {
-      this.setState({ errorMessage: this.props.getErrorMessage(error) });
+      this.setState({
+        errorMessage: this.props.getErrorMessage ? this.props.getErrorMessage(error) : null,
+      });
     }
 
     return error;
@@ -116,7 +136,7 @@ class FormidableTextInput extends PureComponent {
   }
 
   focus() {
-    this.refs.input.focus();
+    this.input.focus();
   }
 
   render() {
@@ -142,7 +162,9 @@ class FormidableTextInput extends PureComponent {
           onChangeText={text => this.onChangeText(text)}
           style={fieldTextStyle}
           cursor={{ start: this.state.text.length, end: this.state.text.length }}
-          ref="input"
+          ref={(ref) => {
+            this.input = ref;
+          }}
         />
       </InputContainer>
     );

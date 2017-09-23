@@ -41,5 +41,7 @@ export default class FormValidator {
           options,
         };
     }
+
+    return null;
   }
 }

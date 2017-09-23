@@ -18,8 +18,9 @@ type _Props = {
   toastErrors: boolean,
   onValidationError: (errorMessages: _ValidationError[]) => void,
   getErrorMessage: (error: _Error, input: _ReactComponent) => string,
-  errorMessages: { [errorType: _ErrorType]: string },
   usePackageValidation: boolean,
+  // eslint-disable-next-line react/no-unused-prop-types
+  errorMessages: { [errorType: _ErrorType]: string },
 };
 
 type _State = {
@@ -45,17 +46,14 @@ const SUBMIT_TYPE = 'submit';
 const isInput = component => component.props.type && component.props.type !== SUBMIT_TYPE;
 
 class Form extends PureComponent {
-  inputs: Array<Object>;
-  state: _State;
-  submitButton: Object;
-  formStyles: Object;
-  polyglot: any;
-
   static defaultProps = {
     onSubmit: () => {},
     onChangeText: () => {},
     usePackageValidation: true,
   };
+
+  props: _Props;
+  state: _State;
 
   constructor(props: _Props) {
     super(props);
@@ -66,6 +64,17 @@ class Form extends PureComponent {
     this.setPolyglot(props);
   }
 
+  componentWillReceiveProps(nextProps: _Props) {
+    this.setFormInputs(nextProps);
+    this.setPolyglot(nextProps);
+  }
+
+  inputs: Array<Object>;
+  inputRefs: { [name: string]: _ReactComponent };
+  submitButton: Object;
+  formStyles: Object;
+  polyglot: any;
+
   setPolyglot(props: _Props) {
     this.polyglot = new Polyglot();
     this.polyglot.extend({
@@ -75,6 +84,7 @@ class Form extends PureComponent {
   }
 
   setFormInputs(props: _Props) {
+    this.inputRefs = {};
     this.inputs = isArray(props.children) ? props.children.filter(isInput) : [props.children];
   }
 
@@ -90,11 +100,6 @@ class Form extends PureComponent {
     };
   }
 
-  componentWillReceiveProps(nextProps: _Props) {
-    this.setFormInputs(nextProps);
-    this.setPolyglot(nextProps);
-  }
-
   getErrorMessage = (error: _Error, input: any) => {
     if (this.props.getErrorMessage) return this.props.getErrorMessage(error, input);
 
@@ -107,19 +112,19 @@ class Form extends PureComponent {
   };
 
   onSubmit() {
-    const errorMessages: _ValidationError[] = [];
+    const validationErrors: _ValidationError[] = [];
 
     if (this.props.usePackageValidation) {
       this.inputs.forEach((child) => {
         if (!child.props.name) return;
 
-        const childRef = this.refs[child.props.name];
+        const childRef = this.inputRefs[child.props.name];
         const error = isFunction(childRef.getValidationError)
           ? childRef.getValidationError()
           : null;
 
         if (error) {
-          errorMessages.push({
+          validationErrors.push({
             input: child,
             name: child.props.name,
             placeholder: child.props.placeholder,
@@ -130,21 +135,23 @@ class Form extends PureComponent {
       });
     }
 
-    if (errorMessages.length === 0) {
+    if (validationErrors.length === 0) {
       Keyboard.dismiss();
       KeyboardModal.dismiss();
-      return this.props.onSubmit(this.state.formData);
+      this.props.onSubmit(this.state.formData);
+
+      return;
     }
 
     if (this.props.toastErrors) {
-      Toast.show(errorMessages[0].message, {
+      Toast.show(validationErrors[0].message, {
         duration: Toast.durations.LONG,
         position: Toast.positions.TOP,
       });
     }
 
     if (this.props.onValidationError) {
-      this.props.onValidationError(errorMessages);
+      this.props.onValidationError(validationErrors);
     }
   }
 
@@ -155,7 +162,9 @@ class Form extends PureComponent {
     const isLastInput = inputPosition === this.inputs.length - 1;
 
     return React.cloneElement(input, {
-      ref: input.props.name,
+      ref: (ref) => {
+        this.inputRefs[input.props.name] = ref;
+      },
       key: input.props.name,
       getErrorMessage: this.getErrorMessage,
       formStyles: this.formStyles,
@@ -167,9 +176,9 @@ class Form extends PureComponent {
         }
 
         const nextInput = this.inputs[inputPosition + 1];
-        const nextInputRef = this.refs[nextInput.props.name];
+        const nextInputRef = this.inputRefs[nextInput.props.name];
 
-        if (isFunction(nextInputRef.focus)) nextInputRef.focus();
+        if (typeof nextInputRef.focus === 'function') nextInputRef.focus();
       },
       onChangeText: (value) => {
         this.setState(

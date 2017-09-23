@@ -5,13 +5,13 @@ import { Easing, Keyboard } from 'react-native';
 import Modal from '@bam.tech/react-native-modalbox';
 import RootSiblings from '@bam.tech/react-native-root-siblings';
 
-type PropsType = {
+type _Props = {
   style: Object,
   easingAnimation: () => void,
   children: any,
 };
 
-const renderModal = (props: PropsType, open: ?boolean) => (
+const renderModal = (props: _Props, open: ?boolean) => (
   <Modal
     backdrop={false}
     position="bottom"
@@ -30,7 +30,7 @@ let keyboardModalCount = 0;
 let keyboardDidShowListener = null;
 let currentProps;
 
-const updateKeyboardModalComponent = (props: PropsType, open: ?boolean) => {
+const updateKeyboardModalComponent = (props: _Props, open: ?boolean) => {
   if (open) currentProps = props;
   if (keyboardModalInstance) keyboardModalInstance.update(renderModal(props, open));
 };
@@ -46,8 +46,8 @@ const open = (keyboardComponent: any) => {
 
 const keyboardDidShow = () => updateKeyboardModalComponent(currentProps, false);
 
-const createKeyboardModalComponent = (props: PropsType) => {
-  keyboardModalCount++;
+const createKeyboardModalComponent = (props: _Props) => {
+  keyboardModalCount += 1;
 
   if (keyboardModalCount > 1) return;
 
@@ -58,7 +58,7 @@ const createKeyboardModalComponent = (props: PropsType) => {
 };
 
 const removeKeyboardModalComponent = () => {
-  keyboardModalCount--;
+  keyboardModalCount -= 1;
 
   if (keyboardModalCount === 0) {
     if (keyboardDidShowListener) keyboardDidShowListener.remove();
@@ -77,13 +77,11 @@ export default class KeyboardModal extends PureComponent {
     easingAnimation: Easing.ease,
   };
 
-  displayed: boolean = false;
-
   componentWillMount() {
     createKeyboardModalComponent(this.props);
   }
 
-  componentWillReceiveProps(nextProps: PropsType) {
+  componentWillReceiveProps(nextProps: _Props) {
     if (this.displayed) {
       updateKeyboardModalComponent(nextProps);
     }
@@ -92,6 +90,8 @@ export default class KeyboardModal extends PureComponent {
   componentWillUnmount() {
     removeKeyboardModalComponent();
   }
+
+  displayed: boolean = false;
 
   open() {
     this.displayed = true;

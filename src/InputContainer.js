@@ -3,35 +3,27 @@
 import React, { PureComponent } from 'react';
 import { Text, View } from 'react-native';
 
-type _TextInputType = 'name' | 'text' | 'email' | 'password' | 'digits';
-
 type _Props = {
-  name: string,
-  onChangeText: (value: string) => void,
-  getErrorMessage: (error: _Error) => string,
-  iconName: string,
-  defaultValue: string,
-  required: boolean,
-  showError: boolean,
-  customErrorMessage: string,
-  type: _TextInputType,
-  placeholder: string,
-  label: string,
-  refName: string,
-  formStyles: any,
-  onFocus: () => void,
-  onBlur: () => void,
+  children: ?*,
+  formStyles: Object,
+  showError?: boolean,
+  active?: boolean,
+  editable?: boolean,
+  errorMessage: ?string,
+  label?: string,
 };
 
 class InputContainer extends PureComponent {
-  props: _Props;
-  state: _State;
-
   static defaultProps = {
+    children: null,
+    formStyles: {},
     showError: false,
-    customErrorMessage: '',
     active: false,
+    editable: false,
+    label: '',
   };
+
+  props: _Props;
 
   render() {
     const { formStyles, active, errorMessage } = this.props;
@@ -41,7 +33,6 @@ class InputContainer extends PureComponent {
       active && formStyles.activeFieldContainer,
       errorMessage ? formStyles.errorContainer : {},
     ];
-    const inputLabelStyle = [formStyles.inputLabel, active && formStyles.activeInputLabel];
 
     return (
       <View
@@ -57,19 +48,19 @@ class InputContainer extends PureComponent {
             </View>
           )}
           {
+            // TODO: Icon container
             // this.props.iconName ?
             //   <Icon name={this.props.iconName} size={iconSize} style={formStyles.icon} />
             //   : <View style={formStyles.iconPlaceholder} />
           }
           {this.props.children}
         </View>
-        {(this.props.customErrorMessage || (this.props.showError && this.props.errorMessage)) && (
-          <View style={formStyles.errorTextContainer}>
-            <Text style={formStyles.error}>
-              {this.props.customErrorMessage || this.props.errorMessage}
-            </Text>
-          </View>
-        )}
+        {this.props.showError &&
+          this.props.errorMessage && (
+            <View style={formStyles.errorTextContainer}>
+              <Text style={formStyles.error}>{this.props.errorMessage}</Text>
+            </View>
+          )}
       </View>
     );
   }
