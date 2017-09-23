@@ -29,7 +29,7 @@ export default class FormidablePicker extends PureComponent {
     this.refs.pickerModal.open();
   };
 
-  onValueChange = value => {
+  onValueChange = (value) => {
     this.setState({ selectedValue: value, showValue: true });
     if (this.props.onChangeText) this.props.onChangeText(value);
   };
@@ -46,7 +46,7 @@ export default class FormidablePicker extends PureComponent {
             value={
               this.state.showValue
                 ? pickerItems.find(item => item.props.value === this.state.selectedValue).props
-                    .label
+                  .label
                 : null
             }
             {...props}

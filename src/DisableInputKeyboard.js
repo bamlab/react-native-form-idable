@@ -21,9 +21,7 @@ export default class DisableInputKeyboard extends PureComponent {
   render() {
     return (
       <TouchableOpacity onPress={this.props.onPress}>
-        <View pointerEvents={'box-only'}>
-          {this.props.children}
-        </View>
+        <View pointerEvents={'box-only'}>{this.props.children}</View>
       </TouchableOpacity>
     );
   }

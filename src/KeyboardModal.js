@@ -11,7 +11,7 @@ type PropsType = {
   children: any,
 };
 
-const renderModal = (props: PropsType, open: ?boolean) =>
+const renderModal = (props: PropsType, open: ?boolean) => (
   <Modal
     backdrop={false}
     position="bottom"
@@ -21,7 +21,8 @@ const renderModal = (props: PropsType, open: ?boolean) =>
     easing={props.easingAnimation}
   >
     {props.children}
-  </Modal>;
+  </Modal>
+);
 
 let keyboardModalInstance = null;
 let displayedKeyboardComponent = null;

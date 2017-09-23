@@ -1,0 +1,23 @@
+{
+  "extends": ["airbnb", "plugin:flowtype/recommended"],
+  "globals": {
+    "__DEV__": true,
+    "__dirname": true,
+    "describe": true,
+    "expect": true,
+    "it": true,
+    "xit": true,
+    "beforeEach": true,
+    "jest": true
+  },
+  "plugins": ["react", "flowtype"],
+  "rules": {
+    "react/jsx-filename-extension": 0,
+    "flowtype/type-id-match": [2, "_([A-Z][a-z0-9]+)+$"]
+  },
+  "settings": {
+    "flowtype": {
+      "onlyFilesWithFlowAnnotation": false
+    }
+  }
+}

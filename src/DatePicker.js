@@ -43,7 +43,7 @@ export default class FormidableDatePicker extends PureComponent {
     this.pickerModalComponent.open();
   };
 
-  onChangeValue = value => {
+  onChangeValue = (value) => {
     this.setState({ date: value, showValue: true });
     this.props.onChangeText(value);
   };
