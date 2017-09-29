@@ -118,7 +118,7 @@ class FormidableTextInput extends Component {
 
   render() {
     const { formStyles } = this.props;
-    const isInputActive = !!(this.state.text || this.state.isFocused);
+    const isInputActive = this.state.isFocused;
 
     const containerStyle = [
       formStyles.fieldContainer,
