@@ -1,8 +1,8 @@
 // @flow
 
-import React, { Component } from 'react';
-import { Keyboard, ScrollView, StyleSheet, View } from 'react-native';
-import { isArray, merge } from 'lodash';
+import React, { PureComponent } from 'react';
+import { Keyboard, ScrollView } from 'react-native';
+import { isArray, isFunction, merge } from 'lodash';
 import Toast from '@bam.tech/react-native-root-toast';
 import Polyglot from 'node-polyglot';
 import { KeyboardModal } from '.';
@@ -12,50 +12,44 @@ type _FormData = { [inputKey: string]: any };
 
 type _Props = {
   children: any,
+  style?: Object,
   onSubmit: (formData: _FormData) => void,
   onChangeText: (formData: _FormData, isFormComplete: boolean) => void,
   formStyles: any,
   toastErrors: boolean,
   onValidationError: (errorMessages: _ValidationError[]) => void,
   getErrorMessage: (error: _Error, input: _ReactComponent) => string,
-  errorMessages: { [errorType: _ErrorType]: string },
   usePackageValidation: boolean,
+  // eslint-disable-next-line react/no-unused-prop-types
+  errorMessages: { [errorType: _ErrorType]: string },
 };
 
 type _State = {
   formData: _FormData,
 };
 
-const styles = StyleSheet.create({
-  scrollView: {
-    alignSelf: 'stretch',
-  },
-});
-
 const errorMessages = {
-  required: '%{placeholder} : Ce champ est requis',
-  invalid: '%{placeholder} : Email invalide',
-  digits: '%{placeholder} : Ce champ ne doit comporter que des chiffres',
-  minLength: '%{placeholder} : Ce champ doit faire au moins %{minLength} caractères',
-  length: '{%placeholder%} : Ce champ doit faire {% length %} caractères',
+  required: '%{displayName} : Ce champ est requis',
+  invalid: '%{displayName} : Email invalide',
+  digits: '%{displayName} : Ce champ ne doit comporter que des chiffres',
+  minLength: '%{displayName} : Ce champ doit faire au moins %{minLength} caractères',
+  length: '{%displayName%} : Ce champ doit faire {% length %} caractères',
 };
 
 const SUBMIT_TYPE = 'submit';
 
 const isInput = component => component.props.type && component.props.type !== SUBMIT_TYPE;
 
-class Form extends Component {
-  inputs: Array<Object>;
-  state: _State;
-  submitButton: Object;
-  formStyles: Object;
-  polyglot: any;
-
+class Form extends PureComponent {
   static defaultProps = {
     onSubmit: () => {},
     onChangeText: () => {},
     usePackageValidation: true,
+    style: {},
   };
+
+  props: _Props;
+  state: _State;
 
   constructor(props: _Props) {
     super(props);
@@ -66,6 +60,17 @@ class Form extends Component {
     this.setPolyglot(props);
   }
 
+  componentWillReceiveProps(nextProps: _Props) {
+    this.setFormInputs(nextProps);
+    this.setPolyglot(nextProps);
+  }
+
+  inputs: Array<Object>;
+  inputRefs: { [name: string]: _ReactComponent };
+  submitButton: Object;
+  formStyles: Object;
+  polyglot: any;
+
   setPolyglot(props: _Props) {
     this.polyglot = new Polyglot();
     this.polyglot.extend({
@@ -75,6 +80,7 @@ class Form extends Component {
   }
 
   setFormInputs(props: _Props) {
+    this.inputRefs = {};
     this.inputs = isArray(props.children) ? props.children.filter(isInput) : [props.children];
   }
 
@@ -90,27 +96,31 @@ class Form extends Component {
     };
   }
 
-  componentWillReceiveProps(nextProps: _Props) {
-    this.setFormInputs(nextProps);
-    this.setPolyglot(nextProps);
-  }
-
   getErrorMessage = (error: _Error, input: any) => {
     if (this.props.getErrorMessage) return this.props.getErrorMessage(error, input);
 
-    return this.polyglot.t(error.type, error.options);
+    const { options } = error;
+
+    return this.polyglot.t(error.type, {
+      ...options,
+      displayName: options.displayName || options.label || options.placeholder,
+    });
   };
 
   onSubmit() {
-    const errorMessages: _ValidationError[] = [];
+    const validationErrors: _ValidationError[] = [];
 
-    if (this.props.usePackageValidation)
-      this.inputs.forEach(child => {
+    if (this.props.usePackageValidation) {
+      this.inputs.forEach((child) => {
         if (!child.props.name) return;
-        const error = this.refs[child.props.name].getValidationError();
+
+        const childRef = this.inputRefs[child.props.name];
+        const error = isFunction(childRef.getValidationError)
+          ? childRef.getValidationError()
+          : null;
 
         if (error) {
-          errorMessages.push({
+          validationErrors.push({
             input: child,
             name: child.props.name,
             placeholder: child.props.placeholder,
@@ -119,22 +129,25 @@ class Form extends Component {
           });
         }
       });
+    }
 
-    if (errorMessages.length === 0) {
+    if (validationErrors.length === 0) {
       Keyboard.dismiss();
       KeyboardModal.dismiss();
-      return this.props.onSubmit(this.state.formData);
+      this.props.onSubmit(this.state.formData);
+
+      return;
     }
 
     if (this.props.toastErrors) {
-      Toast.show(errorMessages[0].message, {
+      Toast.show(validationErrors[0].message, {
         duration: Toast.durations.LONG,
         position: Toast.positions.TOP,
       });
     }
 
     if (this.props.onValidationError) {
-      this.props.onValidationError(errorMessages);
+      this.props.onValidationError(validationErrors);
     }
   }
 
@@ -145,7 +158,9 @@ class Form extends Component {
     const isLastInput = inputPosition === this.inputs.length - 1;
 
     return React.cloneElement(input, {
-      ref: input.props.name,
+      ref: (ref) => {
+        this.inputRefs[input.props.name] = ref;
+      },
       key: input.props.name,
       getErrorMessage: this.getErrorMessage,
       formStyles: this.formStyles,
@@ -157,9 +172,11 @@ class Form extends Component {
         }
 
         const nextInput = this.inputs[inputPosition + 1];
-        this.refs[nextInput.props.name].focus();
+        const nextInputRef = this.inputRefs[nextInput.props.name];
+
+        if (typeof nextInputRef.focus === 'function') nextInputRef.focus();
       },
-      onChangeText: value => {
+      onChangeText: (value) => {
         this.setState(
           {
             formData: {
@@ -195,11 +212,13 @@ class Form extends Component {
     const children = isArray(this.props.children) ? this.props.children : [this.props.children];
 
     return (
-      <View style={styles.scrollView}>
-        <ScrollView scrollEnabled={false} keyboardShouldPersistTaps="always">
-          {children.map(this.renderChild)}
-        </ScrollView>
-      </View>
+      <ScrollView
+        scrollEnabled={false}
+        keyboardShouldPersistTaps="always"
+        contentContainerStyle={this.props.style}
+      >
+        {children.map(this.renderChild)}
+      </ScrollView>
     );
   }
 }

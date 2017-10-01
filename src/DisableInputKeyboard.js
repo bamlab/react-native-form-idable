@@ -1,29 +1,25 @@
-import React, { PureComponent } from 'react';
-import {
-  Picker,
-  StyleSheet,
-  Keyboard,
-  TouchableOpacity,
-  TextInput as RNInput,
-  View,
-} from 'react-native';
-import { format, formatDistance, formatRelative, subDays } from 'date-fns';
-import { Form, KeyboardModal, TextInput } from '.';
+// @flow
 
-type PropsType = {
-  onPress: () => void,
+import React, { PureComponent } from 'react';
+import { TouchableOpacity, View } from 'react-native';
+
+type _Props = {
+  children: ?*,
+  onPress: () => any,
   children: any,
 };
 
 export default class DisableInputKeyboard extends PureComponent {
-  props: PropsType;
+  static defaultProps = {
+    children: null,
+  };
+
+  props: _Props;
 
   render() {
     return (
       <TouchableOpacity onPress={this.props.onPress}>
-        <View pointerEvents={'box-only'}>
-          {this.props.children}
-        </View>
+        <View pointerEvents={'box-only'}>{this.props.children}</View>
       </TouchableOpacity>
     );
   }

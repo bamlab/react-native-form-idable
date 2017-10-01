@@ -1,0 +1,54 @@
+{
+  "extends": ["airbnb", "plugin:flowtype/recommended"],
+  "globals": {
+    "__DEV__": true,
+    "__dirname": true,
+    "describe": true,
+    "expect": true,
+    "it": true,
+    "xit": true,
+    "beforeEach": true,
+    "jest": true,
+    "document": true
+  },
+  "plugins": ["react", "flowtype"],
+  "rules": {
+    "react/jsx-filename-extension": 0,
+    "flowtype/type-id-match": [2, "_([A-Z][a-z0-9]+)+$"],
+    "react/sort-comp": [
+      2,
+      {
+        "order": ["static-methods", "lifecycle", "everything-else", "render"],
+        "groups": {
+          "lifecycle": [
+            "displayName",
+            "props",
+            "propTypes",
+            "state",
+            "contextTypes",
+            "childContextTypes",
+            "mixins",
+            "statics",
+            "defaultProps",
+            "constructor",
+            "getDefaultProps",
+            "getInitialState",
+            "getChildContext",
+            "componentWillMount",
+            "componentDidMount",
+            "componentWillReceiveProps",
+            "shouldComponentUpdate",
+            "componentWillUpdate",
+            "componentDidUpdate",
+            "componentWillUnmount"
+          ]
+        }
+      }
+    ]
+  },
+  "settings": {
+    "flowtype": {
+      "onlyFilesWithFlowAnnotation": false
+    }
+  }
+}

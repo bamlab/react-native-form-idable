@@ -1,12 +1,11 @@
-console.error = jest.fn();
-
 import React from 'react';
-import { mount, shallow } from 'enzyme';
-import { shallowToJson } from 'enzyme-to-json';
+import { mount } from 'enzyme';
 import { Text, TouchableOpacity } from 'react-native';
 
 import Form from './Form';
 import TextInput from './TextInput';
+
+console.error = jest.fn();
 
 const jsdom = require('jsdom').jsdom;
 

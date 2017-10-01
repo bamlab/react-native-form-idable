@@ -1,57 +1,88 @@
-import React, { Component } from 'react';
-import { Text, TextInput, View } from 'react-native';
+// @flow
+
+import React, { PureComponent } from 'react';
+import { TextInput } from 'react-native';
 import FormValidator from './FormValidator';
+import InputContainer from './InputContainer';
 
 type _TextInputType = 'name' | 'text' | 'email' | 'password' | 'digits';
 
-type _Props = {
+export type _Props = {
   name: string,
-  onChangeText: (value: string) => void,
-  getErrorMessage: (error: _Error) => string,
-  iconName: string,
-  defaultValue: string,
-  required: boolean,
-  showError: boolean,
-  customErrorMessage: string,
-  type: _TextInputType,
-  placeholder: string,
-  label: string,
-  refName: string,
-  formStyles: any,
-  onFocus: () => void,
-  onBlur: () => void,
+  formStyles: Object,
+  type?: _TextInputType,
+  label?: string,
+
+  // Validation
+  getErrorMessage: ?(error: _Error) => ?string,
+  errorMessage?: ?string,
+  showError?: boolean,
+
+  // Validation attributes
+  maxLength?: ?number,
+  minLength?: ?number,
+  required?: boolean,
+
+  // RN Text Input props
+  onChangeText: (value: any) => void,
+  placeholder?: string,
+  defaultValue?: string,
+  editable?: boolean,
+  onFocus?: () => void,
+  onBlur?: () => void,
 };
 
 type _State = {
-  text: ?string,
+  text: string,
   errorMessage: ?string,
   isFocused: boolean,
   isActive: boolean,
+  isValid: boolean,
 };
 
-class FormidableTextInput extends Component {
-  props: _Props;
-  state: _State;
-
+class FormidableTextInput extends PureComponent {
   static defaultProps = {
+    formStyles: {},
     showError: false,
-    customErrorMessage: '',
     onFocus: () => {},
     onBlur: () => {},
-    onChangeText: () => {},
-    getErrorMessage: () => {},
+    // eslint-disable-next-line no-unused-vars
+    onChangeText: (value: any) => undefined,
+    getErrorMessage: () => null,
     defaultValue: '',
+    type: 'name',
+    placeholder: '',
+    editable: true,
+    required: false,
+    maxLength: null,
+    minLength: null,
+    label: '',
+    errorMessage: null,
   };
+
+  props: _Props;
+  state: _State;
 
   constructor(props: _Props) {
     super(props);
     this.state = {
-      errorMessage: null,
-      text: this.props.defaultValue,
+      errorMessage: this.props.errorMessage,
+      text: this.props.defaultValue || '',
       isFocused: false,
       isActive: false,
+      isValid: false,
     };
   }
+
+  componentWillReceiveProps(nextProps: _Props) {
+    if (nextProps.errorMessage !== this.props.errorMessage) {
+      this.setState({
+        errorMessage: nextProps.errorMessage,
+      });
+    }
+  }
+
+  input: TextInput;
 
   onChangeText(text: string) {
     this.setState({
@@ -64,12 +95,12 @@ class FormidableTextInput extends Component {
   onBlur() {
     this.setState({ isFocused: false });
     this.getValidationError();
-    this.props.onBlur();
+    if (this.props.onBlur) this.props.onBlur();
   }
 
   onFocus() {
     this.setState({ isFocused: true });
-    this.props.onFocus();
+    if (this.props.onFocus) this.props.onFocus();
   }
 
   getValidationError() {
@@ -79,7 +110,12 @@ class FormidableTextInput extends Component {
     });
 
     if (error) {
-      this.setState({ errorMessage: this.props.getErrorMessage(error) });
+      this.setState({
+        errorMessage: this.props.getErrorMessage ? this.props.getErrorMessage(error) : null,
+        isValid: false,
+      });
+    } else {
+      this.setState({ isValid: true });
     }
 
     return error;
@@ -113,65 +149,47 @@ class FormidableTextInput extends Component {
   }
 
   focus() {
-    this.refs.input.focus();
+    this.input.focus();
   }
 
   render() {
     const { formStyles } = this.props;
     const isInputActive = this.state.isFocused;
+    const { isValid } = this.state;
 
-    const containerStyle = [
-      formStyles.fieldContainer,
-      isInputActive && formStyles.activeFieldContainer,
-      this.state.errorMessage ? formStyles.errorContainer : {},
+    const fieldTextStyle = [
+      formStyles.fieldText,
+      isInputActive && formStyles.activefieldText,
+      isValid && formStyles.validFieldText,
     ];
-    const inputLabelStyle = [formStyles.inputLabel, isInputActive && formStyles.activeInputLabel];
-    const fieldTextStyle = [formStyles.fieldText, isInputActive && formStyles.activefieldText];
     const placeholderAndSelectionColors = isInputActive
       ? formStyles.activePlaceholderAndSelectionColors || formStyles.placeholderAndSelectionColors
       : formStyles.placeholderAndSelectionColors;
 
     return (
-      <View
-        style={[
-          formStyles.inputContainerStyle,
-          this.props.editable === false && formStyles.nonEditableInput,
-        ]}
+      <InputContainer
+        {...this.props}
+        active={isInputActive}
+        valid={isValid}
+        errorMessage={this.state.errorMessage}
       >
-        {!!this.props.label && (
-          <View style={formStyles.inputLabelContainer}>
-            <Text style={formStyles.inputLabel}>{this.props.label}</Text>
-          </View>
-        )}
-        <View style={containerStyle}>
-          {
-            // this.props.iconName ?
-            //   <Icon name={this.props.iconName} size={iconSize} style={formStyles.icon} />
-            //   : <View style={formStyles.iconPlaceholder} />
-          }
-          <TextInput
-            value={this.state.text}
-            underlineColorAndroid="transparent"
-            placeholderTextColor={placeholderAndSelectionColors}
-            selectionColor={placeholderAndSelectionColors}
-            {...this.getTypeProps()}
-            {...this.props}
-            onBlur={() => this.onBlur()}
-            onFocus={() => this.onFocus()}
-            onChangeText={text => this.onChangeText(text)}
-            style={fieldTextStyle}
-            cursor={{ start: this.state.text.length, end: this.state.text.length }}
-            ref="input"
-          />
-        </View>
-        {(this.props.customErrorMessage || (this.props.showError && this.state.errorMessage)) && (
-          <View style={formStyles.errorTextContainer}>
-            <Text style={formStyles.error}>
-              {this.props.customErrorMessage || this.state.errorMessage}
-            </Text>
-          </View>
-        )}
-      </View>
+        <TextInput
+          value={this.state.text}
+          underlineColorAndroid="transparent"
+          placeholderTextColor={placeholderAndSelectionColors}
+          selectionColor={placeholderAndSelectionColors}
+          {...this.getTypeProps()}
+          {...this.props}
+          onBlur={() => this.onBlur()}
+          onFocus={() => this.onFocus()}
+          onChangeText={text => this.onChangeText(text)}
+          style={fieldTextStyle}
+          cursor={{ start: this.state.text.length, end: this.state.text.length }}
+          ref={(ref) => {
+            this.input = ref;
+          }}
+        />
+      </InputContainer>
     );
   }
 }
