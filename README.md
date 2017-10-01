@@ -68,9 +68,11 @@ How it works:
 - **inputLabel:** style applied to the text label (Text)
 - **activeInputLabel:** style applied to the text label when focused or filled (Text)
 - **fieldContainer:** style applied to the field container (View)
-- **activeFieldContainer:** style applied to the field container when focused or filled (View)
+- **activeFieldContainer:** style applied to the field container when focused (View)
+- **validFieldContainer:** style applied to the field container when filled with valid info (View)
 - **fieldText:** style applied to the input (TextInput)
-- **activefieldText:** style applied to the input when focused or filled (TextInput)
+- **activeFieldText:** style applied to the input when focused (TextInput)
+- **validFieldText:** style applied to the input when filled with valid info (TextInput)
 - **errorTextContainer:** style applied to the error container (View)
 - **placeholderAndSelectionColors:** color of the selection bar and of the placeholder
 - **activePlaceholderAndSelectionColors:** color of the selection bar and of the placeholder when focused or filled

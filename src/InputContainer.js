@@ -8,6 +8,7 @@ type _Props = {
   formStyles: Object,
   showError?: boolean,
   active?: boolean,
+  valid?: ?boolean,
   editable?: boolean,
   errorMessage: ?string,
   label?: string,
@@ -19,6 +20,7 @@ class InputContainer extends PureComponent {
     formStyles: {},
     showError: false,
     active: false,
+    valid: null,
     editable: false,
     label: '',
   };
@@ -26,12 +28,13 @@ class InputContainer extends PureComponent {
   props: _Props;
 
   render() {
-    const { formStyles, active, errorMessage } = this.props;
+    const { formStyles, active, errorMessage, valid } = this.props;
 
     const containerStyle = [
       formStyles.fieldContainer,
       active && formStyles.activeFieldContainer,
       errorMessage ? formStyles.errorContainer : {},
+      valid && formStyles.validFieldContainer,
     ];
 
     return (

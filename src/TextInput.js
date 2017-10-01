@@ -37,6 +37,7 @@ type _State = {
   errorMessage: ?string,
   isFocused: boolean,
   isActive: boolean,
+  isValid: ?boolean,
 };
 
 class FormidableTextInput extends PureComponent {
@@ -65,11 +66,20 @@ class FormidableTextInput extends PureComponent {
   constructor(props: _Props) {
     super(props);
     this.state = {
-      errorMessage: null,
+      errorMessage: this.props.errorMessage,
       text: this.props.defaultValue || '',
       isFocused: false,
       isActive: false,
+      isValid: null,
     };
+  }
+
+  componentWillReceiveProps(nextProps: _Props) {
+    if (nextProps.errorMessage !== this.props.errorMessage) {
+      this.setState({
+        errorMessage: nextProps.errorMessage,
+      });
+    }
   }
 
   input: TextInput;
@@ -102,7 +112,10 @@ class FormidableTextInput extends PureComponent {
     if (error) {
       this.setState({
         errorMessage: this.props.getErrorMessage ? this.props.getErrorMessage(error) : null,
+        isValid: false,
       });
+    } else {
+      this.setState({ isValid: true });
     }
 
     return error;
@@ -142,14 +155,24 @@ class FormidableTextInput extends PureComponent {
   render() {
     const { formStyles } = this.props;
     const isInputActive = this.state.isFocused;
+    const { isValid } = this.state;
 
-    const fieldTextStyle = [formStyles.fieldText, isInputActive && formStyles.activefieldText];
+    const fieldTextStyle = [
+      formStyles.fieldText,
+      isInputActive && formStyles.activefieldText,
+      isValid && formStyles.validFieldText,
+    ];
     const placeholderAndSelectionColors = isInputActive
       ? formStyles.activePlaceholderAndSelectionColors || formStyles.placeholderAndSelectionColors
       : formStyles.placeholderAndSelectionColors;
 
     return (
-      <InputContainer {...this.props} active={isInputActive} errorMessage={this.state.errorMessage}>
+      <InputContainer
+        {...this.props}
+        active={isInputActive}
+        valid={isValid}
+        errorMessage={this.state.errorMessage}
+      >
         <TextInput
           value={this.state.text}
           underlineColorAndroid="transparent"
