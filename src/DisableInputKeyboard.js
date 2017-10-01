@@ -5,7 +5,7 @@ import { TouchableOpacity, View } from 'react-native';
 
 type _Props = {
   children: ?*,
-  onPress: () => void,
+  onPress: () => any,
   children: any,
 };
 

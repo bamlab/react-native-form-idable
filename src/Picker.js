@@ -1,7 +1,7 @@
 // @flow
 
 import React, { PureComponent } from 'react';
-import { Picker, View } from 'react-native';
+import { Picker, Platform, View } from 'react-native';
 import { DisableInputKeyboard, KeyboardModal, TextInput } from '.';
 
 type _Props = {
@@ -33,7 +33,7 @@ export default class FormidablePicker extends PureComponent {
   }
 
   input: TextInput;
-  pickerModal: KeyboardModal;
+  pickerModal: ?KeyboardModal;
 
   getValidationError() {
     return this.input.getValidationError();
@@ -44,7 +44,7 @@ export default class FormidablePicker extends PureComponent {
   }
 
   openPicker = () => {
-    this.pickerModal.open();
+    if (this.pickerModal) this.pickerModal.open();
   };
 
   onValueChange = (value: any) => {
@@ -62,9 +62,31 @@ export default class FormidablePicker extends PureComponent {
     return selectedItem ? selectedItem.props.label : null;
   }
 
+  renderPicker() {
+    const pickerItems = this.props.children;
+
+    const picker = (
+      <Picker onValueChange={this.onValueChange} selectedValue={this.state.selectedValue}>
+        {pickerItems}
+      </Picker>
+    );
+
+    return Platform.OS === 'ios' ? (
+      <KeyboardModal
+        ref={(ref) => {
+          this.pickerModal = ref;
+        }}
+        {...this.props}
+      >
+        {picker}
+      </KeyboardModal>
+    ) : (
+      picker
+    );
+  }
+
   render() {
     const { children, ...props } = this.props;
-    const pickerItems = children;
 
     return (
       <View>
@@ -77,16 +99,7 @@ export default class FormidablePicker extends PureComponent {
             {...props}
           />
         </DisableInputKeyboard>
-        <KeyboardModal
-          ref={(ref) => {
-            this.pickerModal = ref;
-          }}
-          {...this.props}
-        >
-          <Picker onValueChange={this.onValueChange} selectedValue={this.state.selectedValue}>
-            {pickerItems}
-          </Picker>
-        </KeyboardModal>
+        {this.renderPicker()}
       </View>
     );
   }

@@ -1,0 +1,209 @@
+exports[`<DatePicker /> builds a datepicker on Android 1`] = `
+<View>
+  <DisableInputKeyboard
+    onPress={[Function]}>
+    <FormidableTextInput
+      androidMode="calendar"
+      date={2017-08-31T22:00:00.000Z}
+      defaultValue=""
+      editable={true}
+      errorMessage={null}
+      formStyles={Object {}}
+      format="D MMMM YYYY"
+      getErrorMessage={[Function]}
+      label=""
+      maxLength={null}
+      maximumDate={2017-09-09T22:00:00.000Z}
+      minLength={null}
+      minimumDate={1992-08-16T22:00:00.000Z}
+      mode="date"
+      name="birthdate"
+      onBlur={[Function]}
+      onChangeText={[Function]}
+      onFocus={[Function]}
+      placeholder="Birthdate"
+      required={false}
+      showError={false}
+      type="date"
+      value={null} />
+  </DisableInputKeyboard>
+</View>
+`;
+
+exports[`<DatePicker /> builds a datepicker on iOS 1`] = `
+<View>
+  <DisableInputKeyboard
+    onPress={[Function]}>
+    <FormidableTextInput
+      androidMode="calendar"
+      date={2017-08-31T22:00:00.000Z}
+      defaultValue=""
+      editable={true}
+      errorMessage={null}
+      formStyles={Object {}}
+      format="D MMMM YYYY"
+      getErrorMessage={[Function]}
+      label=""
+      maxLength={null}
+      maximumDate={2017-09-09T22:00:00.000Z}
+      minLength={null}
+      minimumDate={1992-08-16T22:00:00.000Z}
+      mode="date"
+      name="birthdate"
+      onBlur={[Function]}
+      onChangeText={[Function]}
+      onFocus={[Function]}
+      placeholder="Birthdate"
+      required={false}
+      showError={false}
+      type="date"
+      value={null} />
+  </DisableInputKeyboard>
+  <KeyboardModal
+    androidMode="calendar"
+    date={2017-08-31T22:00:00.000Z}
+    easingAnimation={[Function]}
+    format="D MMMM YYYY"
+    maximumDate={2017-09-09T22:00:00.000Z}
+    minimumDate={1992-08-16T22:00:00.000Z}
+    mode="date"
+    name="birthdate"
+    placeholder="Birthdate"
+    type="date">
+    <DatePickerIOS
+      androidMode="calendar"
+      date={2017-08-31T22:00:00.000Z}
+      format="D MMMM YYYY"
+      maximumDate={2017-09-09T22:00:00.000Z}
+      minimumDate={1992-08-16T22:00:00.000Z}
+      mode="date"
+      name="birthdate"
+      onDateChange={[Function]}
+      placeholder="Birthdate"
+      type="date" />
+  </KeyboardModal>
+</View>
+`;
+
+exports[`<DatePicker /> builds a datetimepicker on Android 1`] = `
+<View>
+  <DisableInputKeyboard
+    onPress={[Function]}>
+    <FormidableTextInput
+      androidMode="calendar"
+      date={2018-01-01T17:54:00.000Z}
+      defaultValue=""
+      editable={true}
+      errorMessage={null}
+      formStyles={Object {}}
+      format="D MMMM YYYY HH:mm"
+      getErrorMessage={[Function]}
+      label=""
+      maxLength={null}
+      maximumDate={2017-09-09T22:00:00.000Z}
+      minLength={null}
+      minimumDate={2000-01-31T23:00:00.000Z}
+      mode="datetime"
+      name="datetime"
+      onBlur={[Function]}
+      onChangeText={[Function]}
+      onFocus={[Function]}
+      placeholder="Datetime"
+      required={false}
+      showError={false}
+      type="datetime"
+      value={null} />
+  </DisableInputKeyboard>
+</View>
+`;
+
+exports[`<DatePicker /> builds a timepicker on Android 1`] = `
+<View>
+  <DisableInputKeyboard
+    onPress={[Function]}>
+    <FormidableTextInput
+      androidMode="calendar"
+      date={2017-09-01T12:54:00.000Z}
+      defaultValue=""
+      editable={true}
+      errorMessage={null}
+      formStyles={Object {}}
+      format="HH:mm"
+      getErrorMessage={[Function]}
+      is24Hour={true}
+      label=""
+      maxLength={null}
+      minLength={null}
+      minuteInterval={30}
+      mode="time"
+      name="hour"
+      onBlur={[Function]}
+      onChangeText={[Function]}
+      onFocus={[Function]}
+      placeholder="Hour"
+      required={false}
+      showError={false}
+      timeZoneOffsetInMinutes={-420}
+      type="date"
+      value={null} />
+  </DisableInputKeyboard>
+</View>
+`;
+
+exports[`<DatePicker /> builds a timepicker on iOS 1`] = `
+<View>
+  <DisableInputKeyboard
+    onPress={[Function]}>
+    <FormidableTextInput
+      androidMode="calendar"
+      date={2017-09-01T12:54:00.000Z}
+      defaultValue=""
+      editable={true}
+      errorMessage={null}
+      formStyles={Object {}}
+      format="HH:mm"
+      getErrorMessage={[Function]}
+      is24Hour={true}
+      label=""
+      maxLength={null}
+      minLength={null}
+      minuteInterval={30}
+      mode="time"
+      name="hour"
+      onBlur={[Function]}
+      onChangeText={[Function]}
+      onFocus={[Function]}
+      placeholder="Hour"
+      required={false}
+      showError={false}
+      timeZoneOffsetInMinutes={-420}
+      type="date"
+      value={null} />
+  </DisableInputKeyboard>
+  <KeyboardModal
+    androidMode="calendar"
+    date={2017-09-01T12:54:00.000Z}
+    easingAnimation={[Function]}
+    format="HH:mm"
+    is24Hour={true}
+    minuteInterval={30}
+    mode="time"
+    name="hour"
+    placeholder="Hour"
+    timeZoneOffsetInMinutes={-420}
+    type="date">
+    <DatePickerIOS
+      androidMode="calendar"
+      date={2017-09-01T12:54:00.000Z}
+      format="HH:mm"
+      is24Hour={true}
+      minuteInterval={30}
+      mode="time"
+      name="hour"
+      onDateChange={[Function]}
+      placeholder="Hour"
+      timeZoneOffsetInMinutes={-420}
+      type="date" />
+  </KeyboardModal>
+</View>
+`;
