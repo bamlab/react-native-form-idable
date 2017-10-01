@@ -11,7 +11,7 @@ MockDate.set('1/1/2000', 120);
 jest.mock('@bam.tech/react-native-root-toast', () => ({}));
 
 describe('<DatePicker />', () => {
-  it('builds a datepicker on iOS', () => {
+  xit('builds a datepicker on iOS', () => {
     const wrapper = shallow(
       <DatePicker
         name="birthdate"
@@ -26,7 +26,7 @@ describe('<DatePicker />', () => {
     expect(shallowToJson(wrapper)).toMatchSnapshot();
   });
 
-  it('builds a timepicker on iOS', () => {
+  xit('builds a timepicker on iOS', () => {
     const wrapper = shallow(
       <DatePicker
         format={'HH:mm'}
@@ -44,7 +44,7 @@ describe('<DatePicker />', () => {
     expect(shallowToJson(wrapper)).toMatchSnapshot();
   });
 
-  it('builds a datepicker on Android', () => {
+  xit('builds a datepicker on Android', () => {
     Platform.OS = 'android';
     DatePickerAndroid.open = jest.fn();
 
@@ -72,7 +72,7 @@ describe('<DatePicker />', () => {
     });
   });
 
-  it('builds a timepicker on Android', () => {
+  xit('builds a timepicker on Android', () => {
     Platform.OS = 'android';
     TimePickerAndroid.open = jest.fn();
 
@@ -98,7 +98,7 @@ describe('<DatePicker />', () => {
     expect(TimePickerAndroid.open).toHaveBeenCalledWith({ hour: 14, is24Hour: true, minute: 54 });
   });
 
-  it('builds a datetimepicker on Android', async () => {
+  xit('builds a datetimepicker on Android', async () => {
     Platform.OS = 'android';
     DatePickerAndroid.open = jest.fn();
     TimePickerAndroid.open = jest.fn();

@@ -37,7 +37,7 @@ type _State = {
   errorMessage: ?string,
   isFocused: boolean,
   isActive: boolean,
-  isValid: ?boolean,
+  isValid: boolean,
 };
 
 class FormidableTextInput extends PureComponent {
@@ -70,7 +70,7 @@ class FormidableTextInput extends PureComponent {
       text: this.props.defaultValue || '',
       isFocused: false,
       isActive: false,
-      isValid: null,
+      isValid: false,
     };
   }
 

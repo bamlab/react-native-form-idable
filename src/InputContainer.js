@@ -8,7 +8,7 @@ type _Props = {
   formStyles: Object,
   showError?: boolean,
   active?: boolean,
-  valid?: ?boolean,
+  valid?: boolean,
   editable?: boolean,
   errorMessage: ?string,
   label?: string,
@@ -20,7 +20,7 @@ class InputContainer extends PureComponent {
     formStyles: {},
     showError: false,
     active: false,
-    valid: null,
+    valid: false,
     editable: false,
     label: '',
   };
