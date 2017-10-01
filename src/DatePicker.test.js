@@ -1,9 +1,12 @@
 import React from 'react';
 import { DatePickerAndroid, Platform, TimePickerAndroid } from 'react-native';
+import MockDate from 'mockdate';
 import { shallow } from 'enzyme';
 import { shallowToJson } from 'enzyme-to-json';
 import DatePicker from './DatePicker';
 import DisableInputKeyboard from './DisableInputKeyboard';
+
+MockDate.set('1/1/2000', 120);
 
 jest.mock('@bam.tech/react-native-root-toast', () => ({}));
 
