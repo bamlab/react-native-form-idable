@@ -12,6 +12,7 @@ export type _Props = {
   formStyles: Object,
   type?: _TextInputType,
   label?: string,
+  renderInputField?: Function,
 
   // Validation
   getErrorMessage: ?(error: _Error) => ?string,
@@ -58,6 +59,7 @@ class FormidableTextInput extends PureComponent {
     minLength: null,
     label: '',
     errorMessage: null,
+    renderInputField: props => <TextInput {...props} />,
   };
 
   props: _Props;
@@ -152,7 +154,7 @@ class FormidableTextInput extends PureComponent {
     this.input.focus();
   }
 
-  render() {
+  renderInputField() {
     const { formStyles } = this.props;
     const isInputActive = this.state.isFocused;
     const { isValid } = this.state;
@@ -166,6 +168,31 @@ class FormidableTextInput extends PureComponent {
       ? formStyles.activePlaceholderAndSelectionColors || formStyles.placeholderAndSelectionColors
       : formStyles.placeholderAndSelectionColors;
 
+    return this.props.renderInputField({
+      value: this.state.text,
+      underlineColorAndroid: 'transparent',
+      placeholderTextColor: placeholderAndSelectionColors,
+      selectionColor: placeholderAndSelectionColors,
+      ...this.getTypeProps(),
+      ...this.props,
+      onBlur: () => this.onBlur(),
+      onFocus: () => this.onFocus(),
+      onChangeText: text => this.onChangeText(text),
+      style: fieldTextStyle,
+      cursor: { start: this.state.text.length, end: this.state.text.length },
+      ref: (ref) => {
+        this.input = ref;
+      },
+      active: isInputActive,
+      valid: isValid,
+      errorMessage: this.state.errorMessage,
+    });
+  }
+
+  render() {
+    const isInputActive = this.state.isFocused;
+    const { isValid } = this.state;
+
     return (
       <InputContainer
         {...this.props}
@@ -173,22 +200,7 @@ class FormidableTextInput extends PureComponent {
         valid={isValid}
         errorMessage={this.state.errorMessage}
       >
-        <TextInput
-          value={this.state.text}
-          underlineColorAndroid="transparent"
-          placeholderTextColor={placeholderAndSelectionColors}
-          selectionColor={placeholderAndSelectionColors}
-          {...this.getTypeProps()}
-          {...this.props}
-          onBlur={() => this.onBlur()}
-          onFocus={() => this.onFocus()}
-          onChangeText={text => this.onChangeText(text)}
-          style={fieldTextStyle}
-          cursor={{ start: this.state.text.length, end: this.state.text.length }}
-          ref={(ref) => {
-            this.input = ref;
-          }}
-        />
+        {this.renderInputField()}
       </InputContainer>
     );
   }
