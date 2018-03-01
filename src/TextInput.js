@@ -139,6 +139,7 @@ class FormidableTextInput extends PureComponent {
         return {
           autoCorrect: false,
           secureTextEntry: true,
+          autoCapitalize: 'none',
         };
       case 'digits': {
         return {
