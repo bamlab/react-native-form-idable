@@ -12,7 +12,7 @@ export type _Props = {
   formStyles: Object,
   type?: _TextInputType,
   label?: string,
-  renderInputField?: Function,
+  renderInputField: Function,
 
   // Validation
   getErrorMessage: ?(error: _Error) => ?string,
