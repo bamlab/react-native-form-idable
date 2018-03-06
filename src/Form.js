@@ -38,7 +38,8 @@ const errorMessages = {
 
 const SUBMIT_TYPE = 'submit';
 
-const isInput = component => component.props.type && component.props.type !== SUBMIT_TYPE;
+const isInput = component =>
+  component && component.props.type && component.props.type !== SUBMIT_TYPE;
 
 class Form extends PureComponent {
   static defaultProps = {
@@ -197,7 +198,7 @@ class Form extends PureComponent {
   }
 
   renderChild = (child: _ReactComponent) => {
-    if (child.props.type === SUBMIT_TYPE) {
+    if (child && child.props.type === SUBMIT_TYPE) {
       return React.cloneElement(child, {
         onPress: () => this.onSubmit(),
         key: 'submit',
