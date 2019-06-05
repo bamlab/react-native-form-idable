@@ -1,11 +1,11 @@
 {
   "name": "react-native-form-idable",
-  "version": "0.0.0-managed-by-semantic-release",
+  "version": "0.0.0-development",
   "description": "",
   "main": "src/index.js",
   "scripts": {
     "test": "eslint src",
-    "semantic-release": "semantic-release pre && npm publish && semantic-release post",
+    "semantic-release": "semantic-release",
     "commitmsg": "validate-commit-msg",
     "commit": "git-cz",
     "format": "prettier-eslint --write \"src/**/*.js\""
