@@ -19,7 +19,7 @@ module.exports = {
       'node-polyglot',
       'validator',
       '@bam.tech/react-native-root-toast',
-      '@bam.tech/react-native-modalbox',
+      'react-native-modalbox',
     ];
   },
   getBlacklistRE() {

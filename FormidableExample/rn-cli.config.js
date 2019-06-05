@@ -9,10 +9,10 @@ module.exports = {
     react: path.resolve(__dirname, 'node_modules/react'),
     lodash: path.resolve(__dirname, 'node_modules/lodash'),
     'react-native': path.resolve(__dirname, 'node_modules/react-native'),
-    '@bam.tech/react-native-modalbox': path.resolve(
+    'react-native-modalbox': path.resolve(
       __dirname,
       '..',
-      'node_modules/@bam.tech/react-native-modalbox',
+      'node_modules/react-native-modalbox',
     ),
   },
   getBlacklistRE() {

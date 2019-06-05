@@ -2,7 +2,7 @@
 
 import React, { PureComponent } from 'react';
 import { Easing, Keyboard } from 'react-native';
-import Modal from '@bam.tech/react-native-modalbox';
+import Modal from 'react-native-modalbox';
 import RootSiblings from '@bam.tech/react-native-root-siblings';
 
 type _Props = {

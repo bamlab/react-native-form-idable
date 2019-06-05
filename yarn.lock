@@ -2,13 +2,6 @@
 # yarn lockfile v1
 
 
-"@bam.tech/react-native-modalbox@^1.4.2":
-  version "1.4.2"
-  resolved "https://registry.yarnpkg.com/@bam.tech/react-native-modalbox/-/react-native-modalbox-1.4.2.tgz#85d130358354834bccb74f5a8d0384e8b5491e29"
-  dependencies:
-    create-react-class "^15.6.0"
-    prop-types "^15.5.10"
-
 "@bam.tech/react-native-root-siblings@^1.2.1":
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/@bam.tech/react-native-root-siblings/-/react-native-root-siblings-1.2.1.tgz#4d948afc29837646299246107c8f09ae4764fd35"
@@ -4985,6 +4978,14 @@ react-dom@^15.4.2:
     fbjs "^0.8.9"
     loose-envify "^1.1.0"
     object-assign "^4.1.0"
+    prop-types "^15.5.10"
+
+react-native-modalbox@^1.7.1:
+  version "1.7.1"
+  resolved "https://registry.yarnpkg.com/react-native-modalbox/-/react-native-modalbox-1.7.1.tgz#cdb623ecd1cbe8699a450217c25b2d6666dc63e6"
+  integrity sha512-Jqn12MKQaT5OSb1uMAEeDQF02xHS+WWdgKl55ecoIknrDy+FIoC3fXHMEoRZH6agADDg9eVBqx8w+P7+EwXTbQ==
+  dependencies:
+    create-react-class "^15.6.0"
     prop-types "^15.5.10"
 
 react-native@^0.42.3:
