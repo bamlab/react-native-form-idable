@@ -15,7 +15,7 @@ const setupContainerTesting = () => {
 };
 setupContainerTesting();
 
-jest.mock('@bam.tech/react-native-root-toast', () => ({}));
+jest.mock('react-native-root-toast', () => ({}));
 
 describe('<Form />', () => {
   it('submits the form', () => {

@@ -8,7 +8,7 @@ import DisableInputKeyboard from './DisableInputKeyboard';
 
 MockDate.set('1/1/2000', 120);
 
-jest.mock('@bam.tech/react-native-root-toast', () => ({}));
+jest.mock('react-native-root-toast', () => ({}));
 
 describe('<DatePicker />', () => {
   xit('builds a datepicker on iOS', () => {

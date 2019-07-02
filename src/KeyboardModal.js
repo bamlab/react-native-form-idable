@@ -3,7 +3,7 @@
 import React, { PureComponent } from 'react';
 import { Easing, Keyboard } from 'react-native';
 import Modal from 'react-native-modalbox';
-import RootSiblings from '@bam.tech/react-native-root-siblings';
+import RootSiblings from 'react-native-root-siblings';
 
 type _Props = {
   style: Object,
