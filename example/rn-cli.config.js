@@ -14,11 +14,11 @@ module.exports = {
       'react',
       'prop-types',
       'date-fns',
-      '@bam.tech/react-native-root-siblings',
+      'react-native-root-siblings',
       'lodash',
       'node-polyglot',
       'validator',
-      '@bam.tech/react-native-root-toast',
+      'react-native-root-toast',
       'react-native-modalbox',
     ];
   },

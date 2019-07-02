@@ -3,7 +3,7 @@
 import React, { PureComponent } from 'react';
 import { Keyboard, ScrollView } from 'react-native';
 import { isArray, isFunction, merge } from 'lodash';
-import Toast from '@bam.tech/react-native-root-toast';
+import Toast from 'react-native-root-toast';
 import Polyglot from 'node-polyglot';
 import { KeyboardModal } from '.';
 import defaultStyles from './defaultStyles';
