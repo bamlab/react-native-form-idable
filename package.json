@@ -48,7 +48,7 @@
     "lodash": "^4.17.4",
     "node-polyglot": "^2.2.2",
     "react-native-modalbox": "^1.7.1",
-    "validator": "^6.2.1"
+    "validator": "^13.7.0"
   },
   "peerDependencies": {
     "react": "*",
