@@ -1,7 +1,8 @@
 // @flow
 
 import React, { PureComponent } from 'react';
-import { Picker, Platform, View } from 'react-native';
+import { Platform, View } from 'react-native';
+import { Picker } from '@react-native-picker/picker';
 import { DisableInputKeyboard, KeyboardModal, TextInput } from '.';
 
 type _Props = {
