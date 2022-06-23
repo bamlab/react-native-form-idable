@@ -31,7 +31,7 @@
     "flow-bin": "^0.38.0",
     "husky": "^0.13.2",
     "jest": "18.1.0",
-    "jsdom": "^9.12.0",
+    "jsdom": "^16.5.0",
     "mockdate": "^2.0.2",
     "prettier-eslint-cli": "^4.3.2",
     "react": "^15.4.2",
